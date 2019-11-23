@@ -2,7 +2,19 @@ import React from 'react'
 import logo from '../assets/images/logo.svg'
 import {Link} from 'react-router-dom'
 
-export default function Navbar() {
+export default function Navbar(props) {    
+    let {user, signOut} = props
+    let authBtn
+
+    if(user) {
+        authBtn = <a href="#" onClick={signOut} className="text-primary">Logout</a>
+    } else {
+        authBtn = 
+        <Link to="/auth" className="nav-link">
+            <button type="button" className="btn my-bg btn-dark rounded-pill my-box-shadow">Login</button>             
+        </Link>        
+    }
+    
     return (
         <nav className="navbar fixed-top navbar-light navbar-expand-lg bg-white">
             <Link className="navbar-brand" to="/">            
@@ -25,9 +37,7 @@ export default function Navbar() {
                 </ul>
                 <ul className="navbar-nav ml-auto">
                     <li className="nav-item active">
-                        <a className="nav-link" href="/auth">
-                        <button type="button" className="btn my-bg btn-dark rounded-pill my-box-shadow">Login</button>
-                        </a>
+                        {authBtn}                        
                     </li>                                  
                 </ul>
             </div>

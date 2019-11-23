@@ -1,5 +1,7 @@
 import React from 'react'
 import Slider from 'react-slick'
+import MetaTags from 'react-meta-tags'
+import Avatar from '../components/Avatar'
 
 export default function Detail(props) {
 
@@ -13,6 +15,12 @@ export default function Detail(props) {
 
     return (
         <div style={{background: '#F3F3F3'}}>
+            <MetaTags>
+                <title>Detail tempat | JalanYuk</title>
+                <meta name="description" content="Website untuk kamu yang hobi jalan-jalan dan liburan." />
+                <meta property="og:title" content="Detail tempat" />
+                <meta property="og:image" content="../assets/logo.svg" />
+            </MetaTags>  
             <div className="container py-5">
                 <div className="row">
                     <div className="col-sm-12 col-md-8 px-0">
@@ -64,11 +72,55 @@ export default function Detail(props) {
                         </div>
 
                         <div className="px-3 py-2 mb-2 bg-white">
-                            <div className="font-weight-bold text-primary d-flex align-items-center">
-                                <i className="material-icons">rate_review</i>&thinsp;
-                                Review
+                            <div className="font-weight-bold text-primary d-flex align-items-center justify-content-between">
+                                <div className="d-flex align-items-center">
+                                    <i className="material-icons">rate_review</i>&thinsp;
+                                    Review
+                                </div>
+                                <div>
+                                    <button type="button" className="btn btn-sm mr-2 btn-sm d-flex align-items-center my-bg btn-dark">
+                                        <i className="material-icons">rate_review</i>&thinsp;
+                                        Tulis Review
+                                    </button>
+                                </div>
                             </div>
                             
+                            <div className="py-3 px-3 my-3" style={{background:'#F7F7F7'}}>
+                                <div className="d-flex w-100">
+                                    <Avatar />
+                                    <div className="px-2">
+                                        <div className="text-primary font-weight-bold">Irman Utamara</div>
+                                        <small className="text-secondary">19/08/2019</small>
+                                    </div>                                    
+                                    <div className="text-warning">
+                                        <i className="material-icons">star</i>
+                                        <i className="material-icons">star</i>
+                                        <i className="material-icons">star</i>
+                                    </div>
+                                </div>
+                                <p className="pt-2">
+                                    Tempatnya keren, rame banget kalo minggu. Rekomended bangetbuat jalan-jalan 
+                                    saat liburan gini.
+                                </p>
+                            </div>
+                            <div className="py-3 px-3 my-3" style={{background:'#F7F7F7'}}>
+                                <div className="d-flex w-100">
+                                    <Avatar />
+                                    <div className="px-2">
+                                        <div className="text-primary font-weight-bold">Irman Utamara</div>
+                                        <small className="text-secondary">19/08/2019</small>
+                                    </div>                                    
+                                    <div className="text-warning">
+                                        <i className="material-icons">star</i>
+                                        <i className="material-icons">star</i>
+                                        <i className="material-icons">star</i>
+                                    </div>
+                                </div>
+                                <p className="pt-2">
+                                    Tempatnya keren, rame banget kalo minggu. Rekomended bangetbuat jalan-jalan 
+                                    saat liburan gini.
+                                </p>
+                            </div>
                         </div>
                     </div>
                     
