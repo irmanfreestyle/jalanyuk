@@ -25,7 +25,7 @@ export default function Detail(props) {
                                 </div>
                             </div>
                             
-                            <img width="100%" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSMBND6gIn2ktgdUmzhpiyCt22agGF9xglFAM8HwWexODJ2m4bD" className="img-fluid" alt="place image"/>
+                            <img width="100%" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSMBND6gIn2ktgdUmzhpiyCt22agGF9xglFAM8HwWexODJ2m4bD" className="img-fluid" alt="place image0"/>
 
                             <div style={{width:'350px'}} className="pt-2">
                                 <Slider {...sliderOptions}>                                

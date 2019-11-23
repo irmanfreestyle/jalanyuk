@@ -5,9 +5,17 @@ import reviewImg from '../assets/images/review.svg'
 import NewDestination from '../components/NewDestination'
 import PlacesReviewed from '../components/PlacesReviewed'
 
+import MetaTags from 'react-meta-tags'
+
 export default function Home() {
     return (
-        <div>            
+        <div>   
+            <MetaTags>
+                <title>Home | JalanYuk</title>
+                <meta name="description" content="Website untuk kamu yang hobi jalan-jalan dan liburan." />
+                <meta property="og:title" content="Home | JalanYuk" />
+                <meta property="og:image" content="../assets/logo.svg" />
+            </MetaTags>         
             <div className="container">
                 <Header />
                 <Categories />
