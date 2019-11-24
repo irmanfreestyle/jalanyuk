@@ -13,8 +13,7 @@ a:hover {
 }
 
 
-button {
-  border: 1px solid #bbb!important;
+button {  
   border-radius: 0px!important;
 }
 
@@ -37,6 +36,9 @@ button.my-bg:hover {
 
 .my-box-shadow {
   box-shadow: 0 5px 28px rgba(0,0,0,0.2), 0 0px 10px rgba(0,0,0,0.2);
+}
+.rm-border {
+  border: none!important;
 }
 
 .rounded-pill {

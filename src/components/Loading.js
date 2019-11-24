@@ -10,8 +10,8 @@ export default function Loding() {
     }
     return (
         <div style={styles}>
-            <div class="spinner-grow text-primary" role="status">
-                <span class="sr-only">Loading...</span>
+            <div className="spinner-grow text-primary" role="status">
+                <span className="sr-only">Loading...</span>
             </div>
         </div>
     )

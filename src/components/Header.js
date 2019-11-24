@@ -4,7 +4,7 @@ import iconHeader from '../assets/images/header.svg'
 export default function Header() {
     const styles = {
         header: {
-            height: '80vh',
+            height: '75vh',
             width: '100%',
             position: 'relative',            
             display: 'flex',

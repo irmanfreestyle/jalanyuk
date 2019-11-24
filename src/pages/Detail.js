@@ -2,6 +2,8 @@ import React from 'react'
 import Slider from 'react-slick'
 import MetaTags from 'react-meta-tags'
 import Avatar from '../components/Avatar'
+import ReviewModal from '../components/ReviewModal'
+import Rate from '../components/Rate'
 
 export default function Detail(props) {
 
@@ -50,10 +52,7 @@ export default function Detail(props) {
                             </div>    
 
                             <div className="my-2 d-flex align-items-center">
-                                <button type="button" className="btn mr-2 btn-sm d-flex align-items-center my-bg btn-dark">
-                                    <i className="material-icons">rate_review</i>&thinsp;
-                                    Tulis Review
-                                </button>
+                                <ReviewModal />
                                 <button type="button" className="btn mr-2 btn-sm d-flex align-items-center btn-outline-success">
                                     <i className="material-icons">bookmark_border</i>&thinsp;
                                     Simpan Tempat
@@ -78,10 +77,7 @@ export default function Detail(props) {
                                     Review
                                 </div>
                                 <div>
-                                    <button type="button" className="btn btn-sm mr-2 btn-sm d-flex align-items-center my-bg btn-dark">
-                                        <i className="material-icons">rate_review</i>&thinsp;
-                                        Tulis Review
-                                    </button>
+                                    <ReviewModal />
                                 </div>
                             </div>
                             
@@ -92,11 +88,7 @@ export default function Detail(props) {
                                         <div className="text-primary font-weight-bold">Irman Utamara</div>
                                         <small className="text-secondary">19/08/2019</small>
                                     </div>                                    
-                                    <div className="text-warning">
-                                        <i className="material-icons">star</i>
-                                        <i className="material-icons">star</i>
-                                        <i className="material-icons">star</i>
-                                    </div>
+                                    <Rate />
                                 </div>
                                 <p className="pt-2">
                                     Tempatnya keren, rame banget kalo minggu. Rekomended bangetbuat jalan-jalan 
@@ -110,11 +102,7 @@ export default function Detail(props) {
                                         <div className="text-primary font-weight-bold">Irman Utamara</div>
                                         <small className="text-secondary">19/08/2019</small>
                                     </div>                                    
-                                    <div className="text-warning">
-                                        <i className="material-icons">star</i>
-                                        <i className="material-icons">star</i>
-                                        <i className="material-icons">star</i>
-                                    </div>
+                                    <Rate />
                                 </div>
                                 <p className="pt-2">
                                     Tempatnya keren, rame banget kalo minggu. Rekomended bangetbuat jalan-jalan 

@@ -19,7 +19,7 @@ export default function Categories() {
         <div className="rounded-pill my-box-shadow d-flex justify-content-between align-items-center" style={styles.wrap}>
             <div style={styles.child}>
                 <Link to="/" className="text-white">
-                    <button className="btn btn-dark my-bg d-flex flex-column align-items-center w-100 py-2 px-2">
+                    <button className="btn btn-dark my-bg d-flex flex-column align-items-center w-100 py-2 rm-border px-2">
                         <i className="material-icons">airplanemode_active</i>
                         Wisata       
                     </button>
@@ -27,7 +27,7 @@ export default function Categories() {
             </div>
             <div style={styles.child}>
                 <Link to="/" className="text-white">
-                    <button className="border-left border-right btn btn-dark my-bg d-flex flex-column align-items-center w-100 py-2 px-2">
+                    <button className="border-left border-right btn btn-dark my-bg d-flex flex-column align-items-center w-100 py-2 px-2 border-bottom-0 border-top-0">
                         <i className="material-icons">restaurant_menu</i>
                         Restoran
                     </button>
@@ -35,7 +35,7 @@ export default function Categories() {
             </div>
             <div style={styles.child}>
                 <Link to="/" className="text-white">
-                    <button className="btn btn-dark my-bg d-flex flex-column align-items-center w-100 py-2 px-2">
+                    <button className="btn btn-dark my-bg d-flex flex-column align-items-center w-100 py-2 rm-border px-2">
                         <i className="material-icons">hotel</i>
                         Hotel
                     </button>

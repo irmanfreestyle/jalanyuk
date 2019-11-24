@@ -11,7 +11,7 @@ export default function Navbar(props) {
     } else {
         authBtn = 
         <Link to="/auth" className="nav-link">
-            <button type="button" className="btn my-bg btn-dark rounded-pill my-box-shadow">Login</button>             
+            <button type="button" className="btn my-bg btn-dark rounded-pill my-box-shadow rm-border">Login</button>             
         </Link>        
     }
     

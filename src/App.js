@@ -30,7 +30,7 @@ class App extends Component {
     }
   }
   
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     firebaseAppAuth.onAuthStateChanged(user => {
       if (user) {
         this.setState({
