@@ -5,6 +5,7 @@ import Home from './Home'
 import Navbar from '../components/Navbar'
 import Detail from './Detail';
 import ScrollIntoView from '../components/ScrollIntoView';
+import Search from './Search';
 
 export default function MainComponent(props) {  
   return (
@@ -17,7 +18,10 @@ export default function MainComponent(props) {
               <Home />
             </Route>
             <Route path="/place/:placeId">
-              <Detail/>
+              <Detail />
+            </Route>
+            <Route path="/search">
+              <Search />
             </Route>
           </Switch>
         </ScrollIntoView>

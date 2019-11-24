@@ -1,17 +1,18 @@
 import React from 'react'
 import logo from '../assets/images/logo.svg'
 import {Link} from 'react-router-dom'
+import UserMenu from './UserMenu'
 
 export default function Navbar(props) {    
     let {user, signOut} = props
     let authBtn
 
     if(user) {
-        authBtn = <a href="#" onClick={signOut} className="text-primary">Logout</a>
+        authBtn = <UserMenu/>
     } else {
         authBtn = 
         <Link to="/auth" className="nav-link">
-            <button type="button" className="btn my-bg btn-dark rounded-pill my-box-shadow rm-border">Login</button>             
+            <button type="button" className="btn my-bg btn-dark rounded-pill my-box-shadow rm-border">Login</button>
         </Link>        
     }
     

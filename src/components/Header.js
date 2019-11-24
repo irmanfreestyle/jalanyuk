@@ -1,5 +1,6 @@
 import React from 'react'
 import iconHeader from '../assets/images/header.svg'
+import {Link} from 'react-router-dom'
 
 export default function Header() {
     const styles = {
@@ -48,9 +49,11 @@ export default function Header() {
                 <p className="text-primary">Kami siap mencari destinasi terbaik</p>
                 <div style={styles.inputSearch} className="rounded-pill">                    
                     <input className="text-primary" placeholder="Mau kemana nih?" type="text" style={styles.inputSearch.input} />
-                    <button className="btn my-bg btn-dark">
-                        <i className="material-icons d-flex justify-content-center align-items-center">search</i>
-                    </button>
+                    <Link to="/search">
+                        <button className="btn rm-border my-bg btn-dark" style={{height:'100%'}}>
+                            <i className="material-icons d-flex justify-content-center align-items-center">search</i>
+                        </button>
+                    </Link>
                 </div>
             </div>
         </div>
