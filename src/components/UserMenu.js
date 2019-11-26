@@ -2,18 +2,28 @@ import React, {useState} from 'react'
 import {Link} from 'react-router-dom'
 
 export default function UserMenu(props) {
-    let signOut = props.signOut
+    let signOut = props.signOut    
 
     let [menu, setMenu] = useState(false)
     let cardMenu = !menu ? '' : 
-        <div className="my-box-shadow" style={{
+        <div className="my-box-shadow d-flex flex-column" style={{
             position:'absolute',
-            right: '0',
-            width: '100%',                
-            background: 'white'
+            right: '0',            
+            background: 'white',
+            width: '200px'
         }}>
-        <Link to="/profile" className="py-1 px-2">Lihat Profil</Link>
-        <div to="/profile" className="text-danger py-1 px-2" onClick={signOut}>Logout</div>
+        <Link to="/profile" className="d-flex align-items-center py-2 px-3 text-secondary">
+            <i className="material-icons">person_outline</i>&thinsp;
+            Lihat Profil
+        </Link>
+        <Link to="/create" className="d-flex align-items-center py-2 px-3 text-success">
+            <i className="material-icons">send</i>&thinsp;
+            Posting Tempat
+        </Link>
+        <Link to="#" className="d-flex align-items-center py-2 px-3 text-danger" onClick={signOut}>
+            <i className="material-icons">exit_to_app</i>&thinsp;
+            Logout
+        </Link>
     </div> 
 
     return (

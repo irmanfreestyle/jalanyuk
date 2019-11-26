@@ -8,7 +8,7 @@ export default function Navbar(props) {
     let authBtn
 
     if(user) {
-        authBtn = <UserMenu/>
+        authBtn = <UserMenu signOut={signOut} />
     } else {
         authBtn = 
         <Link to="/auth" className="nav-link">

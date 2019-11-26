@@ -45,3 +45,6 @@ button.my-bg:hover {
   overflow: hidden!important;
 }
 
+.pointer:hover {
+  cursor: pointer!important;
+}

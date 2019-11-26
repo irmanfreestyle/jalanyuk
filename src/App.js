@@ -5,12 +5,13 @@ import Auth from './pages/Auth';
 import PrivateRoute from './pages/PrivateRoute'
 import Loading from './components/Loading'
 
+import {firebase, firebaseApp} from './firebaseConfig'
 import withFirebaseAuth from 'react-with-firebase-auth'
-import * as firebase from 'firebase/app';
+// import * as firebase from 'firebase/app';
 import 'firebase/auth';
-import firebaseConfig from './firebaseConfig';
+// import firebaseConfig from './firebaseConfig';
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
+// const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 const firebaseAppAuth = firebaseApp.auth();
 const providers = {
@@ -50,9 +51,7 @@ class App extends Component {
 
 
   render() {
-    const {
-      user,
-      signOut,
+    const {      
       signInWithGoogle,
     } = this.props;    
 

@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar'
 import Detail from './Detail';
 import ScrollIntoView from '../components/ScrollIntoView';
 import Search from './Search';
+import Create from './Create'
 
 export default function MainComponent(props) {  
   return (
@@ -22,6 +23,9 @@ export default function MainComponent(props) {
             </Route>
             <Route path="/search">
               <Search />
+            </Route>
+            <Route to="/create">
+              <Create />
             </Route>
           </Switch>
         </ScrollIntoView>

@@ -14,7 +14,8 @@
     "react-scripts": "3.2.0",
     "react-slick": "^0.25.2",
     "react-with-firebase-auth": "^1.2.0",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "uuid": "^3.3.3"
   },
   "scripts": {
     "start": "react-scripts start",
