@@ -1,7 +1,9 @@
 import React, {useState} from 'react'
 import Rate from './Rate'
+import Place from '../api/Place'
+import {useSelector} from 'react-redux'
 
-export default function ReviewModal() {
+export default function ReviewModal(props) {
     const styles = {
         modal: {
             display:'block', 
@@ -9,29 +11,57 @@ export default function ReviewModal() {
         }
     }
     const [showModal, setShowModal] = useState(false)
+    let [loading, setLoading] = useState(false)
+    let [content, setContent] = useState('')
+    let [star, setStar] = useState(0)
+    let currentUser = useSelector(state => {
+        let {uid, displayName, email, photoURL} = state.user || {}
+        return {uid, displayName, email, photoURL}
+    })
+
+
+    function addReview() {
+        setLoading(true)
+        let placeId = props.place.placeId        
+        let reviewData = {reviewer: JSON.parse(JSON.stringify(currentUser)), content, star, created: Date.now()}        
+        let ref = Place.db.collection('places').doc(placeId);
+        ref.set({
+            reviews: [reviewData]
+        }, { merge: true })
+        .then(res => {        
+            alert('Success review')
+            setShowModal(false)
+            setLoading(false)
+        })
+        .catch(err => {
+            console.log(err)
+            setShowModal(false)
+            setLoading(false)
+        })
+    }
 
     return (
         <div>
-            <button onClick={() => setShowModal(true)} type="button" className="rm-border btn mr-2 btn-sm d-flex align-items-center my-bg btn-dark">
+            <button onClick={() => setShowModal(true)} type="button" className="btn mr-2 btn-sm d-flex align-items-center btn-outline-secondary">
                 <i className="material-icons">rate_review</i>&thinsp;
                 Tulis Review
             </button>
 
             <div className="modal fade show" tabIndex="-1" role="dialog" style={showModal?styles.modal:{}}>
-                <div className="modal-dialog" role="document" aria-modal="true">
+                <div className="modal-dialog" >
                     <div className="modal-content">
                     <div className="modal-header justify-content-center">
                         <h5 className="modal-title" id="exampleModalLabel">
-                            Candi Borobudur
+                            {props.place.name}
                         </h5>                        
                     </div>
                     <div className="modal-body">
-                        <Rate />
-                        <textarea placeholder="Bagikan pengalaman Kamu tentang tempat ini" className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <Rate onChange={(e)=>setStar(e)} value={0} />
+                        <textarea onChange={(e) => setContent(e.target.value)} placeholder="Bagikan pengalaman Kamu tentang tempat ini" className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                     </div>
                     <div className="modal-footer">
                         <button onClick={()=>setShowModal(false)} type="button" className="btn text-danger rm-border" data-dismiss="modal">Batal</button>
-                        <button type="button" className="btn my-bg btn-dark rm-border">Posting Review</button>
+                        <button disabled={loading} type="button" onClick={addReview} className="btn my-bg btn-dark rm-border">Posting Review</button>
                     </div>
                     </div>
                 </div>

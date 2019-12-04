@@ -1,15 +1,25 @@
 import React, {useState} from 'react'
 import AddPhotos from '../components/AddPhotos'
 import Place from '../api/Place'
+import {Redirect} from 'react-router-dom'
 
-export default function Create() {
+import {useSelector} from 'react-redux'
+
+export default function Create(props) {
+    let [loading, setLoading] = useState(false)
+
     let [name, setName] = useState('')
     let [category, setCategory] = useState('')
     let [address, setAddress] = useState('')
     let [about, setAbout] = useState('')    
     let [images, setImages] = useState([])    
-    let [phone, setPhone] = useState('')
-    let [web, setWeb] = useState('')
+    let [phone, setPhone] = useState('')    
+    let reviews = []
+    let beenHere = []
+    let user = useSelector(state => {
+        let {uid, displayName, email, photoURL} = state.user || {}
+        return {uid, displayName, email, photoURL}
+    })
 
     let [days, setDays] = useState([
         {
@@ -56,8 +66,71 @@ export default function Create() {
         }
     ])
 
-    function uploadPlace() {
-        Place.postPlace({name, category, address, about, images, phone, web, days})
+    function uploadImages(imageString) {
+        const uuidv1 = require('uuid/v1')
+        let imagesRef = Place.storageRef.child('placeImages').child(uuidv1())
+
+        return new Promise((resolve, reject) => {
+            imagesRef.putString(imageString, 'data_url').then(function(snapshot) {
+                resolve(snapshot.ref.getDownloadURL())
+            })
+            .catch(err => {
+                reject(err)
+            })
+        })
+    }
+    function setupImages(images, callback) {
+        Promise.all(images.map(async (image) => {
+            try {
+                let src = await uploadImages(image.src)
+                return {src}
+            } catch(err) {
+                console.log(err)
+            }
+        }))
+        .then(values => {
+            return callback(values)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+    //
+    
+    function postPlace() {  
+        setLoading(true)
+        setupImages(images, (images) => {            
+            Place.db.collection("places").add({
+                placeId: '',
+                name,
+                category,
+                address,
+                about,
+                images,
+                phone,
+                days,
+                reviews: [],
+                beenHere,
+                uploader: user,
+                created: Date.now()
+            })
+            .then(res => {
+                let placeId = res.id
+                Place.db.collection("places").doc(placeId).update({placeId})
+                .then(function() {
+                    setLoading(false)
+                    alert('Berhasil posting, (ubah pake sweetalert gan...)')                    
+                })
+                .catch(function(error) {                    
+                    console.error("Error updating document: ", error);
+                });
+            })
+            .catch(err => {
+                setLoading(false)
+                alert('Ada error gan')
+                console.log(err)
+            })
+        })
     }
 
     function updateDays(index, time, condition) {
@@ -116,14 +189,7 @@ export default function Create() {
                     No Telepon
                 </label>
                 <input onChange={(e) => setPhone(e.target.value)} type="text" className="form-control" placeholder="Masukan no telepon" />
-            </div>
-            <div className="py-2">
-                <label className="font-weight-bold d-flex align-items-center">                            
-                    <i className="material-icons">web</i> &thinsp;
-                    Situs Web
-                </label>
-                <input onChange={(e) => setWeb(e.target.value)} type="text" className="form-control" placeholder="Masukan situs web tempat" />
-            </div>
+            </div>            
             <div className="py-2">
                 <label className="font-weight-bold d-flex align-items-center">                            
                     <i className="material-icons">access_time</i> &thinsp;
@@ -196,8 +262,9 @@ export default function Create() {
 
                     <div className="py-2">
                         <div className="ml-auto d-flex justify-content-end">
-                            <button onClick={uploadPlace} className="rounded-lg d-flex align-items-center btn btn-sm my-bg btn-dark rm-border my-box-shadow">                            
-                                <i className="material-icons">send</i>&thinsp;
+                            <button disabled={loading} onClick={postPlace} className="rounded-lg d-flex align-items-center btn btn-sm my-bg btn-dark rm-border my-box-shadow">                            
+                                <i style={loading?{display:'none'}:{}} className="material-icons">send</i>&thinsp;
+                                <span style={!loading?{display:'none'}:{}} className="spinner-border spinner-border-sm" role="status" aria-hidden="true"/>&thinsp;
                                 Posting Tempat
                             </button>
                         </div>

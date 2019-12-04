@@ -14,7 +14,7 @@ a:hover {
 
 
 button {  
-  border-radius: 0px!important;
+  
 }
 
 .form-control:focus {  
@@ -47,4 +47,11 @@ button.my-bg:hover {
 
 .pointer:hover {
   cursor: pointer!important;
+}
+
+
+
+/* SLICK CAROUSEL */
+.slick-list> div {
+  margin-left:0;
 }

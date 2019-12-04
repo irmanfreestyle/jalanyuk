@@ -4,10 +4,11 @@ import {Link} from 'react-router-dom'
 import UserMenu from './UserMenu'
 
 export default function Navbar(props) {    
+    
     let {user, signOut} = props
-    let authBtn
+    let authBtn    
 
-    if(user) {
+    if(user !== null) {
         authBtn = <UserMenu signOut={signOut} />
     } else {
         authBtn = 

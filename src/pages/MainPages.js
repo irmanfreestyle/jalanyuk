@@ -8,7 +8,7 @@ import ScrollIntoView from '../components/ScrollIntoView';
 import Search from './Search';
 import Create from './Create'
 
-export default function MainComponent(props) {  
+export default function MainComponent(props) {    
   return (
     <div>
       <Navbar {...props} />
@@ -19,7 +19,7 @@ export default function MainComponent(props) {
               <Home />
             </Route>
             <Route path="/place/:placeId">
-              <Detail />
+              <Detail {...props} />
             </Route>
             <Route path="/search">
               <Search />

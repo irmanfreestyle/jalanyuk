@@ -7,11 +7,12 @@ import Loading from './components/Loading'
 
 import {firebase, firebaseApp} from './firebaseConfig'
 import withFirebaseAuth from 'react-with-firebase-auth'
-// import * as firebase from 'firebase/app';
 import 'firebase/auth';
-// import firebaseConfig from './firebaseConfig';
 
-// const firebaseApp = firebase.initializeApp(firebaseConfig);
+// REDUX
+import { connect } from 'react-redux';
+import {setUser} from './_actions/user.actions'
+
 
 const firebaseAppAuth = firebaseApp.auth();
 const providers = {
@@ -23,37 +24,31 @@ class App extends Component {
 
   constructor(props) {
     super(props)
-    
+
     this.state = {
-      authenticated: false,
-      currentUser: null,
       loading: true
     }
   }
   
-  UNSAFE_componentWillMount() {
+  UNSAFE_componentWillMount() {      
     firebaseAppAuth.onAuthStateChanged(user => {
       if (user) {
-        this.setState({
-          authenticated: true,
-          currentUser: user,
+        this.props.dispatch(setUser(user))
+        this.setState({          
           loading: false
-        });        
+        });                
       } else {
-        this.setState({
-          authenticated: false,
-          currentUser: null,
+        this.setState({          
           loading: false
         });
       }
     });
   }
 
-
-  render() {
+  render() {    
     const {      
       signInWithGoogle,
-    } = this.props;    
+    } = this.props;            
 
     if(this.state.loading) {
       return <Loading />
@@ -61,7 +56,7 @@ class App extends Component {
     return (
       <Router>
         <Switch>
-          <PrivateRoute auth={signInWithGoogle} exact path="/auth" component={Auth} authenticated={this.state.authenticated}/>          
+          <PrivateRoute auth={signInWithGoogle} exact path="/auth" component={Auth} authenticated={this.props.user!==null ? true : false}/>          
           <Route>
             <MainPages {...this.props} />
           </Route>
@@ -71,4 +66,4 @@ class App extends Component {
   }
 }
 
-export default withFirebaseAuth({providers, firebaseAppAuth})(App);
+export default withFirebaseAuth({providers, firebaseAppAuth})(connect()(App));

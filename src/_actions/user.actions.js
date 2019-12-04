@@ -1,0 +1,12 @@
+export const setUser = (payload) => {
+    return {
+        type: 'SET_USER',
+        payload
+    }
+}
+
+export const getUser = () => {
+    return {
+        type: 'GET_USER'
+    }
+}

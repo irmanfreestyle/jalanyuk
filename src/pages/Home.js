@@ -7,7 +7,7 @@ import PlacesReviewed from '../components/PlacesReviewed'
 
 import MetaTags from 'react-meta-tags'
 
-export default function Home() {
+export default function Home() {    
     return (
         <div>   
             <MetaTags>
