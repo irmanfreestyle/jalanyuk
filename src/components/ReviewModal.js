@@ -19,15 +19,33 @@ export default function ReviewModal(props) {
         return {uid, displayName, email, photoURL}
     })
 
+    function checkReviewExist() {
+        let status = false
+        if(currentUser.uid !== undefined) {
+            props.place.reviews.forEach(review => {
+                if(review.reviewer.uid === currentUser.uid) {
+                    status = true
+                }
+            })
+        }
 
-    function addReview() {
-        setLoading(true)
+        return status
+    }
+    function addReview() {        
+        let placeData = Object.assign({}, props.place)        
         let placeId = props.place.placeId        
         let reviewData = {reviewer: JSON.parse(JSON.stringify(currentUser)), content, star, created: Date.now()}        
-        let ref = Place.db.collection('places').doc(placeId);
-        ref.set({
-            reviews: [reviewData]
-        }, { merge: true })
+        let ref = Place.db.collection('places').doc(placeId)
+
+        if(checkReviewExist()) {
+            alert('anda sudah pernah mereview tempat ini')            
+            return false;
+        } else {
+            setLoading(true)
+            placeData.reviews.push(reviewData)            
+        }                
+
+        ref.set(placeData)
         .then(res => {        
             alert('Success review')
             setShowModal(false)

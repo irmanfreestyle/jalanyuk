@@ -1,8 +1,21 @@
 import React, {useState} from 'react'
 import {Link} from 'react-router-dom'
+import {useDispatch} from 'react-redux'
 
 export default function UserMenu(props) {
     let signOut = props.signOut    
+
+    const dispatch = useDispatch()
+
+    function logout() {
+        signOut()
+        .then(res => {
+            window.location.reload()
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
 
     let [menu, setMenu] = useState(false)
     let cardMenu = !menu ? '' : 
@@ -20,7 +33,7 @@ export default function UserMenu(props) {
             <i className="material-icons">send</i>&thinsp;
             Posting Tempat
         </Link>
-        <Link to="#" className="d-flex align-items-center py-2 px-3 text-danger" onClick={signOut}>
+        <Link to="#" className="d-flex align-items-center py-2 px-3 text-danger" onClick={logout}>
             <i className="material-icons">exit_to_app</i>&thinsp;
             Logout
         </Link>

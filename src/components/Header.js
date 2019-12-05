@@ -46,7 +46,7 @@ export default function Header() {
 
             <div style={{position:'relative', zIndex:'3'}}>
                 <h1>Siap berpetualang <br/> keliling Indonesia?</h1>
-                <p className="text-primary">Kami siap mencari destinasi terbaik</p>
+                <p className="text-primary">Cari tau dulu yuk info mengenai tempat tujuan Kamu</p>
                 <div style={styles.inputSearch} className="rounded-pill">                    
                     <input className="text-primary" placeholder="Mau kemana nih?" type="text" style={styles.inputSearch.input} />
                     <Link to="/search">

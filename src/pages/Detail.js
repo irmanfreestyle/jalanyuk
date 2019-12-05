@@ -5,6 +5,7 @@ import Avatar from '../components/Avatar'
 import ReviewModal from '../components/ReviewModal'
 import Rate from '../components/Rate'
 import Loading from '../components/Loading'
+import toDate from '../helpers/toDate'
 
 import {useParams} from 'react-router-dom'
 import Place from '../api/Place'
@@ -21,13 +22,6 @@ function Detail(props) {
     )
     let [hasBeenHere, setHasBeenHere] = useState(false)
     let [noReviews, setNoReviews] = useState('')
-
-
-    function toDate(miliseconds) {
-        let date = new Date(miliseconds);
-        // let res = date.toString("dd MMM"); // "Dec 20"        
-        return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
-    }
 
     function getPlace() {
         Place.db.collection("places").doc(placeId)                
@@ -55,50 +49,44 @@ function Detail(props) {
         }
         setHasBeenHere(status)
     }
+    
+    function toggleBeenHere() {
 
-    async function toggleBeenHere() {
+        let ref = Place.db.collection('places').doc(placeId);
+        let placeData = Object.assign({}, place)
+
         setBeenHereLoading(
             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         )
-        let act = 'add' 
-        if(place.beenHere.length) {
-            place.beenHere.forEach(been => {
-                if(been.uid === currentUser.uid) {                        
-                    act = 'delete'
-                }                
-            })
-        }            
-        
-        let ref = Place.db.collection('places').doc(placeId);
-        if(act === 'delete') {
-            ref.update({beenHere: Place.firebase.firestore.FieldValue.arrayRemove(place.uploader)})
-            .then(res => {
-                console.log('Success update beenhere')
-                setBeenHereLoading(
-                    <i className="material-icons">directions_walk</i>
-                )                
-            })
-            .catch(err => {
-                console.log(err)
-                setBeenHereLoading(
-                    <i className="material-icons">directions_walk</i>
-                )
-            })                
-        } else {
-            ref.update({beenHere: Place.firebase.firestore.FieldValue.arrayUnion(place.uploader)})
-            .then(res => {
-                console.log('Success update beenhere')
-                setBeenHereLoading(
-                    <i className="material-icons">directions_walk</i>
-                )                
-            })
-            .catch(err => {
-                console.log(err)
-                setBeenHereLoading(
-                    <i className="material-icons">directions_walk</i>
-                )
-            })    
-        }                    
+    
+        if(hasBeenHere) {
+            placeData.beenHere.forEach((here, index) => {
+                if(currentUser.uid === here.uid) {
+                    placeData.beenHere.splice(index, 1)
+                }
+            })            
+        } else {            
+            placeData.beenHere.push({
+                displayName: currentUser.displayName,
+                email: currentUser.email,
+                photoURL: currentUser.photoURL,
+                uid: currentUser.uid                
+            })                                              
+        }
+
+        ref.set(placeData)
+        .then(() => {
+            setBeenHereLoading(
+                <i className="material-icons">directions_walk</i>
+            )
+        })
+        .catch(err => {
+            console.log(err)
+            setBeenHereLoading(
+                <i className="material-icons">directions_walk</i>
+            )
+        })      
+
     }
 
     const sliderOptions = {
