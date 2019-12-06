@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Avatar() {
+export default function Avatar(props) {
     const styles = {
         avatar: {
             width: '50px',
@@ -15,7 +15,9 @@ export default function Avatar() {
             borderRadius: '100%',            
         }
     }
+    let {photoURL} = props
+    
     return (
-        <div style={styles.avatar}>IU</div>
+        <img width="35" height="35" src={photoURL} className="rounded-pill" alt="user image"/>
     )
 }

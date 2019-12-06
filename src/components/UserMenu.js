@@ -1,11 +1,8 @@
 import React, {useState} from 'react'
 import {Link} from 'react-router-dom'
-import {useDispatch} from 'react-redux'
 
 export default function UserMenu(props) {
     let signOut = props.signOut    
-
-    const dispatch = useDispatch()
 
     function logout() {
         signOut()

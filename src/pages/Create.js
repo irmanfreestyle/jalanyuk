@@ -10,6 +10,7 @@ export default function Create(props) {
 
     let [name, setName] = useState('')
     let [category, setCategory] = useState('')
+    let [city, setCity] = useState('')
     let [address, setAddress] = useState('')
     let [about, setAbout] = useState('')    
     let [images, setImages] = useState([])    
@@ -104,6 +105,7 @@ export default function Create(props) {
                 placeId: '',
                 name,
                 category,
+                city,
                 address,
                 about,
                 images,
@@ -236,8 +238,15 @@ export default function Create(props) {
                     </div>
                     <div className="py-2">
                         <label className="font-weight-bold d-flex align-items-center">                            
+                            <i className="material-icons">location_city</i> &thinsp;
+                            Kota
+                        </label>
+                        <input onChange={(e) => setCity(e.target.value)}  type="text" className="form-control" placeholder="Masukan Kota atau kabupaten" />
+                    </div>
+                    <div className="py-2">
+                        <label className="font-weight-bold d-flex align-items-center">                            
                             <i className="material-icons">location_on</i> &thinsp;
-                            Alamat Tempat
+                            Alamat lengkap
                         </label>
                         <input onChange={(e) => setAddress(e.target.value)}  type="text" className="form-control" placeholder="Masukan alamat tempat" />
                     </div>

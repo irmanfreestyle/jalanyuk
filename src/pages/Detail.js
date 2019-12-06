@@ -6,6 +6,7 @@ import ReviewModal from '../components/ReviewModal'
 import Rate from '../components/Rate'
 import Loading from '../components/Loading'
 import toDate from '../helpers/toDate'
+import isLogin from '../helpers/isLogin'
 
 import {useParams} from 'react-router-dom'
 import Place from '../api/Place'
@@ -13,6 +14,7 @@ import Place from '../api/Place'
 import {useSelector} from 'react-redux'
 
 function Detail(props) {
+
     let currentUser = useSelector(state => state.user)    
     let {placeId} = useParams()
     let [place, setPlace] = useState(null)
@@ -21,7 +23,7 @@ function Detail(props) {
         <i className="material-icons">directions_walk</i>
     )
     let [hasBeenHere, setHasBeenHere] = useState(false)
-    let [noReviews, setNoReviews] = useState('')
+    let [noReviews, setNoReviews] = useState('')    
 
     function getPlace() {
         Place.db.collection("places").doc(placeId)                
@@ -52,41 +54,76 @@ function Detail(props) {
     
     function toggleBeenHere() {
 
-        let ref = Place.db.collection('places').doc(placeId);
-        let placeData = Object.assign({}, place)
+        if(isLogin(currentUser)) {
+            let ref = Place.db.collection('places').doc(placeId);
+            let placeData = Object.assign({}, place)
 
-        setBeenHereLoading(
-            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-        )
-    
-        if(hasBeenHere) {
-            placeData.beenHere.forEach((here, index) => {
-                if(currentUser.uid === here.uid) {
-                    placeData.beenHere.splice(index, 1)
-                }
-            })            
-        } else {            
-            placeData.beenHere.push({
-                displayName: currentUser.displayName,
-                email: currentUser.email,
-                photoURL: currentUser.photoURL,
-                uid: currentUser.uid                
-            })                                              
+            setBeenHereLoading(
+                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            )
+        
+            if(hasBeenHere) {
+                placeData.beenHere.forEach((here, index) => {
+                    if(currentUser.uid === here.uid) {
+                        placeData.beenHere.splice(index, 1)
+                    }
+                })            
+            } else {            
+                placeData.beenHere.push({
+                    displayName: currentUser.displayName,
+                    email: currentUser.email,
+                    photoURL: currentUser.photoURL,
+                    uid: currentUser.uid                
+                })                                              
+            }
+
+            ref.set(placeData)
+            .then(() => {
+                setBeenHereLoading(
+                    <i className="material-icons">directions_walk</i>
+                )
+            })
+            .catch(err => {
+                console.log(err)
+                setBeenHereLoading(
+                    <i className="material-icons">directions_walk</i>
+                )
+            })     
+        } else {
+           alert('Harap login!') 
+        }
+    }
+
+    function openHours(days) {
+        let hasTrue = false
+
+        days.forEach(day => {
+            if(day.active === true) {
+                hasTrue = true
+            }
+        })
+        
+        if(hasTrue) {
+            return days.map((day, i) => {
+                return (
+                    <div key={i} className="d-flex align-items-center">
+                        <div style={{width:'80px'}}>
+                            <small>{day.name}</small>
+                        </div>
+                        <div style={day.active?{}:{display:'none'}}>
+                            <small className="font-weight-bold">
+                                {day.open}
+                            </small>
+                            <small className="px-1">-</small>
+                            <small className="font-weight-bold">{day.close}</small>
+                        </div>
+                        <small className="font-weight-bold" style={!day.active?{}:{display:'none'}}>Tutup</small>
+                    </div>
+                )
+            })
         }
 
-        ref.set(placeData)
-        .then(() => {
-            setBeenHereLoading(
-                <i className="material-icons">directions_walk</i>
-            )
-        })
-        .catch(err => {
-            console.log(err)
-            setBeenHereLoading(
-                <i className="material-icons">directions_walk</i>
-            )
-        })      
-
+        return <b>-</b>
     }
 
     const sliderOptions = {
@@ -105,7 +142,7 @@ function Detail(props) {
     return (
         <div style={{background: '#F3F3F3'}}>
             <MetaTags>
-                <title>Detail tempat | JalanYuk</title>
+                <title>{place.name} | JalanYuk</title>
                 <meta name="description" content="Website untuk kamu yang hobi jalan-jalan dan liburan." />
                 <meta property="og:title" content="Detail tempat" />
                 <meta property="og:image" content="../assets/logo.svg" />
@@ -120,10 +157,12 @@ function Detail(props) {
                             </div>                            
                             <div className="my-1 d-flex align-items-center text-primary">
                                 <i className="material-icons">location_on</i>&thinsp;
-                                {place.address}
+                                {place.city}
                             </div>
                             <div style={{position:'relative', fontSize:'12px'}}>
-                                <img width="100%" src={place.images[activeSlide].src} className="img-fluid" alt="place image0"/>
+                                <img width="100%" src={place.images[activeSlide].src} className="img-fluid" alt="place image0"
+                                style={{maxHeight:'400px'}}
+                                />
                                 <div 
                                     className="rounded-pill my-bg text-white px-2 py-1 d-flex align-items-center"
                                     style={{position:'absolute', right:'5px',top:'5px'}}>
@@ -167,13 +206,8 @@ function Detail(props) {
                         </div>  
                     </div>
                     
-                    <div className="col-sm-12 col-md-4 px-1">
-                        <div className="bg-white mb-1 py-2 px-2 text-secondary d-flex align-items-center">
-                            Diupload oleh &thinsp;
-                                <span className="text-primary">{place.uploader.displayName}</span>
-                        </div>
-
-                        <div className="bg-white mb-1 px-2 py-2" style={{position: 'sticky', top: '75px'}}>
+                    <div className="col-sm-12 col-md-4 px-1">                        
+                        <div className="bg-white mb-1 px-3 py-2" style={{position: 'sticky', top: '70px'}}>
                             <span className="font-weight-bold">Info tempat</span>
                             <div className="d-flex py-2 text-primary">
                                 <i className="material-icons">location_on</i>&thinsp;
@@ -190,25 +224,7 @@ function Detail(props) {
                                 <div>
                                     <div>Jam Buka</div>
                                     <div className="text-secondary">
-                                        {
-                                            place.days.map((day, i) => {
-                                                return (
-                                                    <div key={i} className="d-flex align-items-center">
-                                                        <div style={{width:'80px'}}>
-                                                            <small>{day.name}</small>
-                                                        </div>
-                                                        <div style={day.active?{}:{display:'none'}}>
-                                                            <small className="font-weight-bold">
-                                                                {day.open}
-                                                            </small>
-                                                            <small className="px-1">-</small>
-                                                            <small className="font-weight-bold">{day.close}</small>
-                                                        </div>
-                                                        <small className="font-weight-bold" style={!day.active?{}:{display:'none'}}>Tutup</small>
-                                                    </div>
-                                                )
-                                            })
-                                        }
+                                        {openHours(place.days)}
                                     </div>
                                 </div>
                             </div>
@@ -218,7 +234,7 @@ function Detail(props) {
                                 <div>
                                     <div>Nomor Telepon</div>
                                     <small className="text-secondary">
-                                        {place.phone || '-'}
+                                        {place.phone || <b>-</b>}
                                     </small>
                                 </div>
                             </div>
@@ -236,18 +252,12 @@ function Detail(props) {
                             </p>
                         </div>
                         
-                    </div><div className="px-3 py-2 mb-1 col-sm-12 col-md-4"/>
-
-                    <div className="px-1 py-2 mb-1 col-sm-12 col-md-8">
                         <div className="bg-white px-3 py-3 bg-white">
                             <div className="font-weight-bold text-primary d-flex align-items-center justify-content-between">
                                 <div className="d-flex align-items-center">
                                     <i className="material-icons">rate_review</i>&thinsp;
                                     Review
-                                </div>
-                                {/* <div>
-                                    <ReviewModal />
-                                </div> */}
+                                </div>                                
                             </div>
                             {noReviews}
                             {
@@ -255,7 +265,7 @@ function Detail(props) {
                                     return (
                                         <div key={i} className="py-3 px-3 my-3" style={{background:'#F7F7F7'}}>
                                             <div className="d-flex w-100">
-                                                <Avatar />
+                                                <Avatar photoURL={review.reviewer.photoURL} />
                                                 <div className="px-2">
                                                     <div className="text-primary font-weight-bold">{review.reviewer.displayName}</div>
                                                     <small className="text-secondary">
@@ -272,7 +282,38 @@ function Detail(props) {
                                 })
                             }                            
                         </div>
-                    </div><div className="px-3 py-2 mb-1 col-sm-12 col-md-4 px-1"/>
+                    </div>
+                    <div className="px-1 py-2 col-sm-12 col-md-4">
+                        <div className="bg-white px-3 py-3" style={{position: 'sticky', top: '70px'}}>
+                            <div className="font-weight-bold text-primary d-flex align-items-center">
+                                <i className="material-icons">info_outline</i>&thinsp;
+                                <span>User yang pernah kesini </span> &thinsp;
+                                ({place.beenHere.length})
+                            </div>
+                            <ul className="list-group pt-2">
+                                {
+                                    place.beenHere.map((user, i) => {
+                                        return (
+                                            <li key={i} className="list-group-item d-flex justify-content-between align-items-center">
+                                                <div className="text-secondary">
+                                                    <img width="30" src={user.photoURL} className="img-fluid rounded-pill" alt="user image"/>&thinsp;
+                                                    {user.displayName}
+                                                </div>                                                
+                                            </li>
+                                        )
+                                    })
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* <div className="px-1 py-2 mb-1 col-sm-12 col-md-8">
+                        
+                    </div>
+                    
+                    <div className="px-3 py-2 mb-1 col-sm-12 col-md-4 px-1">
+                        
+                    </div> */}
 
                 </div>
             </div>

@@ -3,6 +3,8 @@ import Rate from './Rate'
 import Place from '../api/Place'
 import {useSelector} from 'react-redux'
 
+import isLogin from '../helpers/isLogin'
+
 export default function ReviewModal(props) {
     const styles = {
         modal: {
@@ -15,7 +17,8 @@ export default function ReviewModal(props) {
     let [content, setContent] = useState('')
     let [star, setStar] = useState(0)
     let currentUser = useSelector(state => {
-        let {uid, displayName, email, photoURL} = state.user || {}
+        if(!state.user.hasOwnProperty('uid')) return null
+        let {uid, displayName, email, photoURL} = state.user
         return {uid, displayName, email, photoURL}
     })
 
@@ -32,35 +35,47 @@ export default function ReviewModal(props) {
         return status
     }
     function addReview() {        
-        let placeData = Object.assign({}, props.place)        
-        let placeId = props.place.placeId        
-        let reviewData = {reviewer: JSON.parse(JSON.stringify(currentUser)), content, star, created: Date.now()}        
-        let ref = Place.db.collection('places').doc(placeId)
+        if(isLogin(currentUser)) {
+            let placeData = Object.assign({}, props.place)        
+            let placeId = props.place.placeId        
+            let reviewData = {reviewer: JSON.parse(JSON.stringify(currentUser)), content, star, created: Date.now()}        
+            let ref = Place.db.collection('places').doc(placeId)
 
-        if(checkReviewExist()) {
-            alert('anda sudah pernah mereview tempat ini')            
-            return false;
+            if(checkReviewExist()) {
+                alert('anda sudah pernah mereview tempat ini')            
+                return false;
+            } else {
+                setLoading(true)
+                placeData.reviews.push(reviewData)            
+            }                
+
+            ref.set(placeData)
+            .then(res => {        
+                alert('Success review')
+                setShowModal(false)
+                setLoading(false)
+            })
+            .catch(err => {
+                console.log(err)
+                setShowModal(false)
+                setLoading(false)
+            })
         } else {
-            setLoading(true)
-            placeData.reviews.push(reviewData)            
-        }                
+            alert('Harap Login!')
+        }
+    }
 
-        ref.set(placeData)
-        .then(res => {        
-            alert('Success review')
-            setShowModal(false)
-            setLoading(false)
-        })
-        .catch(err => {
-            console.log(err)
-            setShowModal(false)
-            setLoading(false)
-        })
+    function showReviewModal() {
+        if(isLogin(currentUser)) {
+            setShowModal(true)
+        } else {
+            alert('Harap Login!')
+        }
     }
 
     return (
         <div>
-            <button onClick={() => setShowModal(true)} type="button" className="btn mr-2 btn-sm d-flex align-items-center btn-outline-secondary">
+            <button onClick={showReviewModal} type="button" className="btn mr-2 btn-sm d-flex align-items-center btn-outline-secondary">
                 <i className="material-icons">rate_review</i>&thinsp;
                 Tulis Review
             </button>
