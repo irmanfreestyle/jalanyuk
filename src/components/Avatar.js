@@ -1,23 +1,11 @@
 import React from 'react'
 
 export default function Avatar(props) {
-    const styles = {
-        avatar: {
-            width: '50px',
-            height: '50px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            background: 'grey',
-            padding: '8px',
-            fontWeight: 'bold',
-            borderRadius: '100%',            
-        }
-    }
-    let {photoURL} = props
+    let {photoURL, width, height} = props
     
     return (
-        <img width="35" height="35" src={photoURL} className="rounded-pill" alt="user image"/>
+        <img
+            style={{boxShadow: '1px 1px 2px rgba(0,0,0,0.4)'}} 
+            width={width} height={height} src={photoURL} className="rounded-pill" alt="user image"/>
     )
 }

@@ -265,7 +265,7 @@ function Detail(props) {
                                     return (
                                         <div key={i} className="py-3 px-3 my-3" style={{background:'#F7F7F7'}}>
                                             <div className="d-flex w-100">
-                                                <Avatar photoURL={review.reviewer.photoURL} />
+                                                <Avatar width="35" height="35" photoURL={review.reviewer.photoURL} />
                                                 <div className="px-2">
                                                     <div className="text-primary font-weight-bold">{review.reviewer.displayName}</div>
                                                     <small className="text-secondary">
