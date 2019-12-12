@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 
 export default function Rate(props) {    
     let [value, setValue] = useState(props.value)
@@ -13,7 +13,7 @@ export default function Rate(props) {
     }
 
     function setupRate() {
-        for(let i = 0; i < 5; i++) {            
+        for(let i = 0; i < 5; i++) {                        
             stars.push(
                 <i key={i} className="material-icons pointer text-warning" onClick={() => setRate(i+1)}>
                     {`${i<value ? 'star' : 'star_border'}`}
@@ -21,7 +21,6 @@ export default function Rate(props) {
             )
         }
     }
-
     setupRate()
 
     return (

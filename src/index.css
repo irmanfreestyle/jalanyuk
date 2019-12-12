@@ -13,8 +13,8 @@ a:hover {
 }
 
 
-button {  
-  
+.nav-link.active {
+  background: #ff5252!important;
 }
 
 .form-control:focus {  

@@ -4,10 +4,11 @@ import {Switch, Route, } from 'react-router-dom'
 import Home from './Home'
 import NavbarDesktop from '../components/navigation/NavbarDesktop'
 import NavbarMobile from '../components/navigation/NavbarMobile'
-import Detail from './Detail';
-import ScrollIntoView from '../components/ScrollIntoView';
-import Search from './Search';
+import Detail from './Detail'
+import ScrollIntoView from '../components/ScrollIntoView'
+import Search from './Search'
 import Create from './Create'
+import Profile from './profile/Profile'
 
 import {useMediaQuery} from 'react-responsive'
 
@@ -31,20 +32,23 @@ export default function MainComponent(props) {
       </Mobile>
 
 
-      <div className="py-5 my-3">
+      <div className="pt-5 mt-3" style={{background: '#F3F3F3', minHeight: '100vh'}}>
         <ScrollIntoView>
           <Switch>
             <Route exact path="/">
               <Home />
             </Route>
-            <Route exact path="/place/:placeId">
+            <Route path="/place/:placeId">
               <Detail {...props} />
             </Route>
-            <Route exact path="/search">
+            <Route path="/search">
               <Search />
             </Route>
-            <Route exact to="/create">
+            <Route path="/create">
               <Create />
+            </Route>
+            <Route path="/profile/:userId">
+              <Profile />
             </Route>
           </Switch>
         </ScrollIntoView>

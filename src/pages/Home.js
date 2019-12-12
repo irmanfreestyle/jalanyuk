@@ -9,7 +9,7 @@ import MetaTags from 'react-meta-tags'
 
 export default function Home() {    
     return (
-        <div>   
+        <div className="bg-white">   
             <MetaTags>
                 <title>Home | JalanYuk</title>
                 <meta name="description" content="Website untuk kamu yang hobi jalan-jalan dan liburan." />

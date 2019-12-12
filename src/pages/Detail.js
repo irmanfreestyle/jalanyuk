@@ -214,7 +214,7 @@ function Detail(props) {
                                 <div>
                                     <div>Lokasi Tempat</div>
                                     <small className="text-secondary">
-                                        {place.address}
+                                        {place.city}, {place.address}
                                     </small>
                                 </div>
                             </div>

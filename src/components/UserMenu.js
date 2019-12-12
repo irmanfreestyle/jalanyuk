@@ -24,7 +24,7 @@ export default function UserMenu(props) {
                     <Avatar width="30" height="30" photoURL={currentUser.photoURL} /> &thinsp;                    
                 </button>
                 <div className="dropdown-menu dropdown-menu-right" aria-labelledby="drop-menu" style={{width:'200px'}}>
-                <Link to="/profile" className="d-flex align-items-center py-2 px-3 text-secondary">
+                <Link to={`/profile/${currentUser.uid}`} className="d-flex align-items-center py-2 px-3 text-secondary">
                     <i className="material-icons">person_outline</i>&thinsp;
                     Lihat Profil
                 </Link>

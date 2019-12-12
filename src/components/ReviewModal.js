@@ -38,7 +38,9 @@ export default function ReviewModal(props) {
         if(isLogin(currentUser)) {
             let placeData = Object.assign({}, props.place)        
             let placeId = props.place.placeId        
-            let reviewData = {reviewer: JSON.parse(JSON.stringify(currentUser)), content, star, created: Date.now()}        
+            let reviewId = require('uuid/v1')
+
+            let reviewData = {reviewer: JSON.parse(JSON.stringify(currentUser)), content, star, created: Date.now(), reviewId: reviewId()}        
             let ref = Place.db.collection('places').doc(placeId)
 
             if(checkReviewExist()) {
