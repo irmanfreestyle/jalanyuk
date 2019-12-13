@@ -6,6 +6,7 @@ import Avatar from '../../components/Avatar'
 import Firebase from '../../api/Place'
 import Loading from '../../components/Loading'
 import ReviewCard from './components/ReviewCard'
+import PlaceCard from './components/PlaceCard'
 
 function Profile() {
     let {userId} = useParams()
@@ -76,7 +77,7 @@ function Profile() {
             <div className="container bg-white py-5 text-center">
                 <Avatar photoURL={thisUser.photoURL} width="100" height="100" />
                 <h3 className="py-2">{thisUser.displayName}</h3>
-                {isUserPage ? <button className="btn btn-outline-danger btn-sm">Edit Profil</button> : null}
+                {/* {isUserPage ? <button className="btn btn-outline-danger btn-sm">Edit Profil</button> : null} */}
             </div>
             <div className="my-2 container px-0">
                 <ul className="nav nav-pills bg-white mb-2 py-2 px-2" role="tablist">
@@ -92,7 +93,13 @@ function Profile() {
                 </ul>
                 <div className="tab-content" id="myTabContent">
                     <div className="tab-pane fade show active" id="upload" role="tabpanel" aria-labelledby="upload-tab">
-                        ...
+                        <div className="bg-white py-2 px-2">
+                            {
+                                places.map((place, i) => {
+                                    return <PlaceCard key={i} place={place} />
+                                })
+                            }                            
+                        </div>
                     </div>
                     <div className="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
                         {

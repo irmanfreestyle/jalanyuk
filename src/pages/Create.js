@@ -8,6 +8,9 @@ import {useSelector} from 'react-redux'
 export default function Create(props) {
     let [loading, setLoading] = useState(false)
 
+    let [placeIdRedirect, setPlaceIdRedirect] = useState('')
+    let [toPlace, setToPlace] = useState(false)
+
     let [name, setName] = useState('')
     let [category, setCategory] = useState('')
     let [city, setCity] = useState('')
@@ -122,6 +125,9 @@ export default function Create(props) {
                 .then(function() {
                     setLoading(false)
                     alert('Berhasil posting, (ubah pake sweetalert gan...)')                    
+                    // redirect to place page
+                    setPlaceIdRedirect(placeId)
+                    setToPlace(true)
                 })
                 .catch(function(error) {                    
                     console.error("Error updating document: ", error);
@@ -203,6 +209,7 @@ export default function Create(props) {
             </div>
         </div>
 
+    if(toPlace) return <Redirect to={`/place/${placeIdRedirect}`} />
     return (
         <div>
             <div className="my-bg text-white py-5">
