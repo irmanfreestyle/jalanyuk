@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import {useParams} from 'react-router-dom'
 import MetaTags from 'react-meta-tags'
 import {useSelector} from 'react-redux'
@@ -10,14 +10,27 @@ import PlaceCard from './components/PlaceCard'
 
 function Profile() {
     let {userId} = useParams()
+    let prevUserId = usePrevious(userId)
 
     let [thisUser, setThisUser] = useState(null) //USER DARI USER ID URL
     let [places, setPlaces] = useState(null)
+    let [allPlace, setAllPlace] = useState(null)
     let [reviews, setReviews] = useState(null)
     let [savedPlaces, setSavedPlaces] = useState(null)
 
     let currentUser = useSelector(state => state.user) //USER YANG LOGIN
     let isUserPage = (userId === currentUser.uid)
+
+    //Hook
+    function usePrevious(userId) {
+        const ref = useRef()
+
+        useEffect(() => {
+            ref.current = userId            
+        }, [userId])
+
+        return ref.current
+    }
 
     function getUser() {
         Firebase.db.collection("users").doc(userId)                
@@ -29,9 +42,11 @@ function Profile() {
     function getPlace() {        
         let tmpPlaces = []
         let tmpReviews = []        
+        let tmpAllPlace = []
         Firebase.db.collection("places")
         .onSnapshot(function(snapshot) {                  
             snapshot.forEach(doc => {
+                tmpAllPlace.push(doc.data())
                 if(doc.data().uploader.uid === userId) {                    
                     tmpPlaces.push(doc.data())
                 }
@@ -43,6 +58,7 @@ function Profile() {
                 })
             })
 
+            setAllPlace(tmpAllPlace)
             setReviews(tmpReviews)
             setPlaces(tmpPlaces)
         }); 
@@ -56,10 +72,14 @@ function Profile() {
 
     }
 
+    if(prevUserId !== userId) {
+        getUser()
+        getPlace()
+    }
+    
     useEffect(() => {
         getUser()
         getPlace()
-        console.log(isUserPage)
     }, [])
 
     if(thisUser === null || reviews === null || places === null) {
@@ -96,7 +116,7 @@ function Profile() {
                         <div className="bg-white py-2 px-2">
                             {
                                 places.map((place, i) => {
-                                    return <PlaceCard key={i} place={place} />
+                                    return <PlaceCard refreshPlace={getPlace} key={i} place={place} allPlace={allPlace} />
                                 })
                             }                            
                         </div>

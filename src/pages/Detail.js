@@ -8,7 +8,7 @@ import Loading from '../components/Loading'
 import toDate from '../helpers/toDate'
 import isLogin from '../helpers/isLogin'
 
-import {useParams} from 'react-router-dom'
+import {useParams, Link} from 'react-router-dom'
 import Place from '../api/Place'
 
 import {useSelector} from 'react-redux'
@@ -22,14 +22,20 @@ function Detail(props) {
     let [beenHereLoading, setBeenHereLoading] = useState(
         <i className="material-icons">directions_walk</i>
     )
+    let [savedLoading, setSavedLoading] = useState(
+        <i className="material-icons">bookmark_border</i>
+    )
     let [hasBeenHere, setHasBeenHere] = useState(false)
+    let [hasSaved, setHasSaved] = useState(false)
     let [noReviews, setNoReviews] = useState('')    
 
     function getPlace() {
         Place.db.collection("places").doc(placeId)                
         .onSnapshot(function(doc) {            
+            if(doc.data() === undefined) return false
             setPlace(doc.data())
             initBeenHere(doc.data())
+            initHasSaved(doc.data())
 
             setNoReviews(doc.data().reviews.length ? null :
                 <div className="py-2 px-2 text-secondary">Tidak ada review</div>)
@@ -50,6 +56,18 @@ function Detail(props) {
             })
         }
         setHasBeenHere(status)
+    }
+
+    function initHasSaved(placeData) {
+        let status = false        
+        if(currentUser !== null && placeData.saved !== undefined) {            
+            placeData.saved.forEach(user => {                
+                if(user.uid === currentUser.uid) {                
+                    status = true
+                }
+            })
+        }
+        setHasSaved(status)
     }
     
     function toggleBeenHere() {
@@ -126,6 +144,49 @@ function Detail(props) {
         return <b>-</b>
     }
 
+
+    function savePlace() {
+        if(isLogin(currentUser)) {
+            let ref = Place.db.collection('places').doc(placeId);
+            let placeData = Object.assign({}, place)
+            
+            setSavedLoading(
+                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            )
+
+            if(hasSaved) {
+                placeData.saved.forEach((saved, index) => {                    
+                    if(saved.uid === currentUser.uid) {
+                        placeData.saved.splice(index, 1)
+                    }
+                })
+            } else {
+                if(placeData.saved === undefined) placeData.saved = []
+                placeData.saved.push({
+                    displayName: currentUser.displayName,
+                    email: currentUser.email,
+                    photoURL: currentUser.photoURL,
+                    uid: currentUser.uid
+                })
+            }
+            ref.set(placeData)
+            .then(() => {
+                setSavedLoading(
+                    <i className="material-icons">bookmark_border</i>
+                )
+            })
+            .catch(err => {
+                setSavedLoading(
+                    <i className="material-icons">bookmark_border</i>
+                )
+                console.log(err, 'Error save place')
+            })
+            
+        } else {
+            alert('Harap login!') 
+        }
+    }
+
     const sliderOptions = {
         dots: false,
         infinite: false,
@@ -193,8 +254,9 @@ function Detail(props) {
 
                             <div className="my-2 d-flex align-items-center flex-wrap">
                                 <ReviewModal place={place} />
-                                <button type="button" className="btn mr-2 btn-sm d-flex align-items-center btn-outline-secondary">
-                                    <i className="material-icons">bookmark_border</i>&thinsp;
+                                <button onClick={savePlace} type="button" className={"btn mr-2 btn-sm d-flex align-items-center "+(hasSaved?'btn-outline-danger':'btn-outline-secondary')}>
+                                    {savedLoading}
+                                    &thinsp;
                                     Simpan Tempat
                                 </button>
                                 <button onClick={toggleBeenHere} type="button" className={"btn mr-2 btn-sm d-flex align-items-center "+(hasBeenHere?'btn-outline-danger':'btn-outline-secondary')}>
@@ -296,8 +358,10 @@ function Detail(props) {
                                         return (
                                             <li key={i} className="list-group-item d-flex justify-content-between align-items-center">
                                                 <div className="text-secondary">
-                                                    <img width="30" src={user.photoURL} className="img-fluid rounded-pill" alt="user image"/>&thinsp;
-                                                    {user.displayName}
+                                                    <Link to={`/profile/${user.uid}`}>
+                                                        <img width="30" src={user.photoURL} className="img-fluid rounded-pill" alt="user image"/>&thinsp;
+                                                        {user.displayName}
+                                                    </Link>
                                                 </div>                                                
                                             </li>
                                         )

@@ -38,16 +38,16 @@ export default function MainComponent(props) {
             <Route exact path="/">
               <Home />
             </Route>
-            <Route path="/place/:placeId">
+            <Route exact path="/place/:placeId">
               <Detail {...props} />
             </Route>
-            <Route path="/search">
+            <Route exact path="/search">
               <Search />
             </Route>
-            <Route path="/create">
+            <Route exact path="/create">
               <Create />
             </Route>
-            <Route path="/profile/:userId">
+            <Route exact path="/profile/:userId">
               <Profile />
             </Route>
           </Switch>
