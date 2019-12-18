@@ -5,6 +5,8 @@ import Firebase from '../../../api/Place'
 import {useSelector} from 'react-redux'
 import isLogin from '../../../helpers/isLogin'
 
+import Swal from '../../../helpers/Swal'
+
 function PlaceCard(props) {
     let {place, allPlace} = props
     let history = useHistory()
@@ -15,11 +17,14 @@ function PlaceCard(props) {
 
 
     function deletePlace(placeId) {
-        if(window.confirm('Yakin hapus tempat ini?')) {
+        Swal.confirm({title: 'Yakin hapus tempat ini?', icon: 'warning', confirmText: 'Ya, hapus'}, nextDeletePlace)
+
+        function nextDeletePlace() {
+            Swal.loading()
             Firebase.db.collection("places").doc(placeId)
             .delete()
             .then(() => {
-                alert('Berhasil dihapus')
+                Swal.swalert('Tempat berhasil dihapus', '', 'success')
                 props.refreshPlace()
             }).catch(err => {
                 console.error("Error removing document: ", err);

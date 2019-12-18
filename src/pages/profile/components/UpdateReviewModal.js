@@ -2,6 +2,8 @@ import React, {useState} from 'react'
 import Rate from '../../../components/Rate'    
 import Place from '../../../api/Place'
 
+import Swal from '../../../helpers/Swal'
+
 function UpdateReviewModal(props) {
     let review = props.review
     let place = Object.assign({}, props.place)
@@ -17,16 +19,17 @@ function UpdateReviewModal(props) {
         setShowModal(false)        
     }
 
-    function updateReview() {                
+    function updateReview() {       
+        
+        Swal.confirm({title: 'Ubah review?', icon: 'question', confirmText: 'Ya, ubah'}, nextUpdateReview)
 
-        place.reviews.forEach((rev, index) => {
-            if(rev.reviewId === review.reviewId) {
-                rev.content = content
-                rev.star = star
-            }
-        })                
-
-        if(window.confirm('Edit review ini?')) {
+        function nextUpdateReview() {
+            place.reviews.forEach((rev, index) => {
+                if(rev.reviewId === review.reviewId) {
+                    rev.content = content
+                    rev.star = star
+                }
+            }) 
             setLoading(true)
             props.forceRenderRate(false)
             Place.db.collection("places").doc(place.placeId).set(place)
@@ -35,13 +38,14 @@ function UpdateReviewModal(props) {
                 setLoading(false)
                 setShowModal(false)
                 props.forceRenderRate(true)
+                Swal.swalert('Review berhasil diupdate', '', 'success')
             })
             .catch(err => {
                 console.log(err)
                 setLoading(false)
                 props.forceRenderRate(true)
             })
-        }   
+        }
     }
 
     return (

@@ -4,6 +4,8 @@ import Firebase from '../../../api/Place'
 import {useSelector} from 'react-redux'
 import isLogin from '../../../helpers/isLogin'
 
+import Swal from '../../../helpers/Swal'
+
 function SavedCard(props) {
     
     let {place} = props
@@ -12,20 +14,28 @@ function SavedCard(props) {
     let thisUser = isLogin(currentUser) && (userId === currentUser.uid)
 
     function removeSaved(placeId) {
-        let placeData = Object.assign({}, place)
+        Swal.confirm({
+            title: 'Hapus tempat yang telah disimpan?',
+            icon: 'warning',
+            confirmText: 'Ya, hapus'
+        }, nextRemove)
+        
+        function nextRemove() {
+            Swal.loading()
 
-        placeData.saved.forEach((saved, i) => {
-            if(saved.uid === userId) {
-                placeData.saved.splice(i, 1)
-            }
-        })           
+            let placeData = Object.assign({}, place)
 
-        if(window.confirm('Tempat ini akan dihapus dari simpanan anda')) {
+            placeData.saved.forEach((saved, i) => {
+                if(saved.uid === userId) {
+                    placeData.saved.splice(i, 1)
+                }
+            })           
             Firebase.db.collection('places').doc(placeId).set(placeData)
             .then(() => {
                 props.refreshPlace()
-                alert('berhasil dihapus')
+                Swal.swalert('Berhasil dihapus', '', 'success')
             }).catch(err => {
+                Swal.swalert('Terjadi kesalahan', 'error')
                 console.error("Error removing document: ", err);
             });
         }

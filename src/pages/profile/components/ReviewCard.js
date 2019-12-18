@@ -8,6 +8,8 @@ import Place from '../../../api/Place'
 import {Link} from 'react-router-dom'
 import UpdateReviewModal from './UpdateReviewModal'
 
+import Swal from '../../../helpers/Swal'
+
 function ReviewCard(props) {
     let {review, edit} = props    
     let [renderRate, setRenderRate] = useState(true)    
@@ -20,26 +22,29 @@ function ReviewCard(props) {
     }
 
 
-    function deleteReview(place, reviewId) {        
-        let placeId = place.placeId
-        let placeData = Object.assign({}, place)
-        
-        placeData.reviews.forEach((rev, index) => {
-            if(rev.reviewId === reviewId) {
-                placeData.reviews.splice(index, 1)
-            }
-        })        
+    function deleteReview(place, reviewId) {       
+        Swal.confirm({title: 'Yakin hapus review ini?', icon: 'warning', confirmText: 'Ya, hapus'}, nextDeleteReview)
 
-        if(window.confirm('Yakin hapus review ini?')) {
+        function nextDeleteReview() {
+            Swal.loading()
+            let placeId = place.placeId
+            let placeData = Object.assign({}, place)
+            
+            placeData.reviews.forEach((rev, index) => {
+                if(rev.reviewId === reviewId) {
+                    placeData.reviews.splice(index, 1)
+                }
+            })        
+    
             Place.db.collection("places").doc(placeId).set(placeData)
             .then(() => {
                 props.refreshPlace()
-                alert('Review berhasil dihapus')
+                Swal.swalert('Review berhasil dihapus', '', 'success')
             })
             .catch(err => {
                 console.log(err)
             })
-        }                
+        }             
     }
 
 

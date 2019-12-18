@@ -4,6 +4,7 @@ import Place from '../api/Place'
 import {useSelector} from 'react-redux'
 
 import isLogin from '../helpers/isLogin'
+import Swal from '../helpers/Swal'
 
 export default function ReviewModal(props) {
     const styles = {
@@ -44,7 +45,7 @@ export default function ReviewModal(props) {
             let ref = Place.db.collection('places').doc(placeId)
 
             if(checkReviewExist()) {
-                alert('anda sudah pernah mereview tempat ini')            
+                Swal.swalert('anda sudah pernah mereview tempat ini', '', 'info')            
                 return false;
             } else {
                 setLoading(true)
@@ -53,7 +54,7 @@ export default function ReviewModal(props) {
 
             ref.set(placeData)
             .then(res => {        
-                alert('Success review')
+                Swal.swalert('Review berhasil', '', 'success')
                 setShowModal(false)
                 setLoading(false)
             })
