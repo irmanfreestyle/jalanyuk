@@ -44,7 +44,7 @@ export default function MainComponent(props) {
             <Route exact path="/search">
               <Search />
             </Route>
-            <Route exact path="/create">
+            <Route exact path="/create/:editmode?">
               <Create />
             </Route>
             <Route exact path="/profile/:userId">

@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import AddPhotos from '../components/AddPhotos'
 import Place from '../api/Place'
-import {Redirect} from 'react-router-dom'
+import {Redirect, useParams, useHistory} from 'react-router-dom'
 
 import {useSelector} from 'react-redux'
 
@@ -69,6 +69,12 @@ export default function Create(props) {
             close: '00:00'
         }
     ])
+
+    let editmode = useParams().editmode === undefined ? false : true
+    setTimeout(() => {
+        console.log(arguments)
+    }, 1000)
+    
 
     function uploadImages(imageString) {
         const uuidv1 = require('uuid/v1')

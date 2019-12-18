@@ -12,7 +12,9 @@ a:hover {
   text-decoration: none;
 }
 
-
+.text-center {
+  text-align: center!important;
+}
 .nav-link.active {
   background: #ff5252!important;
 }

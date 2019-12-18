@@ -7,6 +7,7 @@ import Firebase from '../../api/Place'
 import Loading from '../../components/Loading'
 import ReviewCard from './components/ReviewCard'
 import PlaceCard from './components/PlaceCard'
+import SavedCard from './components/SavedCard'
 
 function Profile() {
     let {userId} = useParams()
@@ -43,6 +44,7 @@ function Profile() {
         let tmpPlaces = []
         let tmpReviews = []        
         let tmpAllPlace = []
+        let tmpSaved = []
         Firebase.db.collection("places")
         .onSnapshot(function(snapshot) {                  
             snapshot.forEach(doc => {
@@ -56,20 +58,21 @@ function Profile() {
                         tmpReviews.push(review)
                     }
                 })
+                
+                if(doc.data().saved !== undefined) {
+                    doc.data().saved.forEach(saved => {
+                        if(saved.uid === userId) {
+                            tmpSaved.push(doc.data())
+                        }
+                    })
+                }
             })
-
+            
             setAllPlace(tmpAllPlace)
             setReviews(tmpReviews)
             setPlaces(tmpPlaces)
+            setSavedPlaces(tmpSaved)
         }); 
-    }
-
-    function getReview() {
-
-    }
-
-    function getSavedPlace() {
-
     }
 
     if(prevUserId !== userId) {
@@ -82,7 +85,7 @@ function Profile() {
         getPlace()
     }, [])
 
-    if(thisUser === null || reviews === null || places === null) {
+    if(thisUser === null || reviews === null || places === null || savedPlaces === null) {
         return <Loading />
     }
 
@@ -130,7 +133,20 @@ function Profile() {
                             })
                         }
                     </div>
-                    <div className="tab-pane fade" id="saved" role="tabpanel" aria-labelledby="saved-tab">...</div>
+                    <div className="tab-pane fade" id="saved" role="tabpanel" aria-labelledby="saved-tab">
+                        <div className="row bg-white px-2 py-2 mx-0">
+                            {
+                                !savedPlaces.length ? <div className="w-100 py-3 px-3 mb-0 text-primary text-center">Belum ada tempat yang disimpan</div> :
+                                savedPlaces.map((saved, i) => {
+                                    return (
+                                        <div key={i} className="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                            <SavedCard refreshPlace={getPlace} place={saved}/>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
