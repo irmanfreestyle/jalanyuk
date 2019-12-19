@@ -8,6 +8,7 @@ import Detail from './Detail'
 import ScrollIntoView from '../components/ScrollIntoView'
 import Search from './Search'
 import Create from './Create'
+import EditPlace from './EditPlace'
 import Profile from './profile/Profile'
 
 import {useMediaQuery} from 'react-responsive'
@@ -44,8 +45,11 @@ export default function MainComponent(props) {
             <Route exact path="/search">
               <Search />
             </Route>
-            <Route exact path="/create/:editmode?">
+            <Route exact path="/create">
               <Create />
+            </Route>
+            <Route path="/edit/:placeId">
+              <EditPlace />
             </Route>
             <Route exact path="/profile/:userId">
               <Profile />

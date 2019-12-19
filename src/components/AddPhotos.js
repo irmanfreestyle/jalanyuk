@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import Swal from '../helpers/Swal'
 
 export default class AddPhotos extends Component {
 
@@ -13,21 +14,30 @@ export default class AddPhotos extends Component {
             photos: []
         }
     }
+    
+    componentDidMount() {
+        if(this.props.edit === true) {
+            this.setState({photos: this.props.photos})
+            this.renderImage(this.props.photos)
+        }
+    }
 
     removeImage = (index) => {          
-        let photos = [...this.state.photos]
+        Swal.confirm({title: 'Hapus foto?', icon: 'question', confirmText: 'Ya, hapus'}, () => {
+            let photos = [...this.state.photos]
         
-        photos.splice(index, 1)
-        this.setState({photos})        
-        this.renderImage(photos)
-        this.props.sendToParent(photos) //SEND PHOTOS TO PARENT COMPONENT
+            photos.splice(index, 1)
+            this.setState({photos})        
+            this.renderImage(photos)
+            this.props.sendToParent(photos) //SEND PHOTOS TO PARENT COMPONENT
+        })
     }
 
     selectImage() {
         this.inputRef.current.click()
     }
 
-    renderImage(photos) {
+    renderImage(photos) {        
         let imagesElement = this.state.imagesElement.slice()
         imagesElement = photos.map((photo, index) => {
             return (

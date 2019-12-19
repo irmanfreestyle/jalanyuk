@@ -59,7 +59,7 @@ function PlaceCard(props) {
                                         Atur
                                     </button>
                                     <div className="dropdown-menu">
-                                        <Link to={{pathname:`/create/editmode`, placeData: place}} className="dropdown-item text-success d-flex align-items-center" >
+                                        <Link to={{pathname:`/edit/${place.placeId}`}} className="dropdown-item text-success d-flex align-items-center" >
                                             Edit tempat ini
                                         </Link>        
 

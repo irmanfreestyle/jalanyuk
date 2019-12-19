@@ -64,7 +64,7 @@ export default function ReviewModal(props) {
                 setLoading(false)
             })
         } else {
-            alert('Harap Login!')
+            Swal.swalert('Sliahkan login terlebih dahulu', '', 'info')
         }
     }
 

@@ -1,12 +1,20 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import AddPhotos from '../components/AddPhotos'
 import Place from '../api/Place'
-import {Redirect} from 'react-router-dom'
+import {Redirect, useParams} from 'react-router-dom'
+
+import Firebase from '../api/Place'
+import Loading from '../components/Loading'
 
 import {useSelector} from 'react-redux'
 
-export default function Create(props) {
+import Swal from '../helpers/Swal'
+
+export default function EditPlace(props) {
+    let {placeId} = useParams()
+
     let [loading, setLoading] = useState(false)
+    let [placeData, setPlaceData] = useState(null)
 
     let [placeIdRedirect, setPlaceIdRedirect] = useState('')
     let [toPlace, setToPlace] = useState(false)
@@ -18,8 +26,9 @@ export default function Create(props) {
     let [about, setAbout] = useState('')    
     let [images, setImages] = useState([])    
     let [phone, setPhone] = useState('')    
-    let reviews = []
-    let beenHere = []
+    let [reviews, setReviews] = useState([])
+    let [beenHere, setBeenHere] = useState([])
+    let [saved, setSaved] = useState([])
     let user = useSelector(state => {
         let {uid, displayName, email, photoURL} = state.user || {}
         return {uid, displayName, email, photoURL}
@@ -69,6 +78,34 @@ export default function Create(props) {
             close: '00:00'
         }
     ])
+
+    function getPlace() {
+        Firebase.db.collection('places').doc(placeId)
+        .get()
+        .then(doc => {
+            if(doc.exists) {
+                setPlaceData(doc.data())
+
+                // SETUP FIELDS
+                setName(doc.data().name)
+                setCategory(doc.data().category)
+                setCity(doc.data().city)
+                setAddress(doc.data().address)
+                setAbout(doc.data().about)
+                setImages(doc.data().images)
+                setPhone(doc.data().phone)
+                setDays(doc.data().days)
+                setReviews(doc.data().reviews)
+                setBeenHere(doc.data().beenHere)
+                if(doc.data().saved !== undefined) setSaved(doc.data().saved)
+            }
+        })
+        .catch(err => console.log(err))
+    }
+
+    useEffect(() => {
+        getPlace()
+    }, [])
     
 
     function uploadImages(imageString) {
@@ -84,8 +121,19 @@ export default function Create(props) {
             })
         })
     }
-    function setupImages(images, callback) {
-        Promise.all(images.map(async (image) => {
+    function setupImages(img, callback) {
+        // FILTER IMAGES
+        let currentImages = []
+        let newImages = []
+        img.forEach((image, i) => {
+            let fill = image.src.split(':')
+            if(fill[0] === 'https') {
+                currentImages.push(image)
+            } else {
+                newImages.push(image)
+            }
+        })
+        Promise.all(newImages.map(async (image) => {
             try {
                 let src = await uploadImages(image.src)
                 return {src}
@@ -94,7 +142,8 @@ export default function Create(props) {
             }
         }))
         .then(values => {
-            return callback(values)
+            let resImage = currentImages.concat(values)
+            return callback(resImage)
         })
         .catch(err => {
             console.log(err)
@@ -102,11 +151,11 @@ export default function Create(props) {
     }
     //
     
-    function postPlace() {  
+    function updatePlace() {  
         setLoading(true)
         setupImages(images, (images) => {            
-            Place.db.collection("places").add({
-                placeId: '',
+            Place.db.collection("places").doc(placeId).set({
+                placeId,
                 name,
                 category,
                 city,
@@ -115,24 +164,17 @@ export default function Create(props) {
                 images,
                 phone,
                 days,
-                reviews: [],
+                reviews,
                 beenHere,
                 uploader: user,
                 created: Date.now()
             })
             .then(res => {
-                let placeId = res.id
-                Place.db.collection("places").doc(placeId).update({placeId})
-                .then(function() {
-                    setLoading(false)
-                    alert('Berhasil posting, (ubah pake sweetalert gan...)')                    
-                    // redirect to place page
-                    setPlaceIdRedirect(placeId)
-                    setToPlace(true)
-                })
-                .catch(function(error) {                    
-                    console.error("Error updating document: ", error);
-                });
+                setLoading(false)
+                Swal.swalert('Tempat berhasil diupdate', '', 'success')
+                // redirect to place page
+                // setPlaceIdRedirect(placeId)
+                // setToPlace(true)
             })
             .catch(err => {
                 setLoading(false)
@@ -180,42 +222,39 @@ export default function Create(props) {
     })
 
 
-    let [showDetailPlace, setShowDetail] = useState(false)
-    let detailComponent = !showDetailPlace ?  
-        <div>
-            <div className="py-2">
-                <div className="custom-control custom-checkbox">
-                    <input type="checkbox" onChange={() => setShowDetail(true)} className="custom-control-input " id="detail-place" />
-                    <label className="custom-control-label font-weight-bold" htmlFor="detail-place">Tambahkan jam buka, telepon, situs</label>
-                </div>
-            </div>            
-        </div>
-        : 
-        <div>
-            <div className="py-2">
-                <label className="font-weight-bold d-flex align-items-center">                            
-                    <i className="material-icons">local_phone</i> &thinsp;
-                    No Telepon
-                </label>
-                <input onChange={(e) => setPhone(e.target.value)} type="text" className="form-control" placeholder="Masukan no telepon" />
-            </div>            
-            <div className="py-2">
-                <label className="font-weight-bold d-flex align-items-center">                            
-                    <i className="material-icons">access_time</i> &thinsp;
-                    Jam Buka
-                </label>
-                <div className="custom-control custom-checkbox">
-                    {openHours}
+    let detailComponent = 
+        <>
+            <div>
+                <div className="py-2">
+                    <label className="font-weight-bold d-flex align-items-center">                            
+                        <i className="material-icons">local_phone</i> &thinsp;
+                        No Telepon
+                    </label>
+                    <input value={phone} onChange={(e) => setPhone(e.target.value)} type="text" className="form-control" placeholder="Masukan no telepon" />
+                </div>            
+                <div className="py-2">
+                    <label className="font-weight-bold d-flex align-items-center">                            
+                        <i className="material-icons">access_time</i> &thinsp;
+                        Jam Buka
+                    </label>
+                    <div className="custom-control custom-checkbox">
+                        {openHours}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
 
     if(toPlace) return <Redirect to={`/place/${placeIdRedirect}`} />
+    if(!placeData) return <Loading />
+    if(placeData) {        
+        if(placeData.uploader.uid !== user.uid) return <Redirect to={'/'} />
+    }
+
     return (
         <div>
             <div className="my-bg text-white py-5">
                 <div className="container font-weight-bold">
-                    Posting Tempat
+                    Edit {placeData.name}
                     <div>
                         <small>Bagikan tempat wisata, hotel, atau restoran yang kamu tahu</small>
                     </div>
@@ -230,14 +269,14 @@ export default function Create(props) {
                             <i className="material-icons">store</i> &thinsp;
                             Nama Tempat
                         </label>
-                        <input type="text" className="form-control" placeholder="Masukan nama tempat" onChange={(e) => setName(e.target.value)} />
+                        <input type="text" className="form-control" placeholder="Masukan nama tempat" onChange={(e) => setName(e.target.value)} value={name} />
                     </div>
                     <div className="py-2">
                         <label className="font-weight-bold d-flex align-items-center">
                             <i className="material-icons">apps</i> &thinsp;
                             Kategori
                         </label>
-                        <select className="form-control" onChange={(e) => setCategory(e.target.value)} value={category}>
+                        <select value={category} className="form-control" onChange={(e) => setCategory(e.target.value)}>
                             <option>Pilih Kategori Tempat</option>
                             <option>Tempat Wisata</option>
                             <option>Restoran</option>
@@ -249,28 +288,28 @@ export default function Create(props) {
                             <i className="material-icons">location_city</i> &thinsp;
                             Kota
                         </label>
-                        <input onChange={(e) => setCity(e.target.value)}  type="text" className="form-control" placeholder="Masukan Kota atau kabupaten" />
+                        <input value={city} onChange={(e) => setCity(e.target.value)}  type="text" className="form-control" placeholder="Masukan Kota atau kabupaten" />
                     </div>
                     <div className="py-2">
                         <label className="font-weight-bold d-flex align-items-center">                            
                             <i className="material-icons">location_on</i> &thinsp;
                             Alamat lengkap
                         </label>
-                        <input onChange={(e) => setAddress(e.target.value)}  type="text" className="form-control" placeholder="Masukan alamat tempat" />
+                        <input value={address} onChange={(e) => setAddress(e.target.value)}  type="text" className="form-control" placeholder="Masukan alamat tempat" />
                     </div>
                     <div className="py-2">
                         <label className="font-weight-bold d-flex align-items-center">                            
                             <i className="material-icons">info_outline</i> &thinsp;
                             Tentang Tempat
                         </label>
-                        <textarea onChange={(e) => setAbout(e.target.value)} className="form-control" rows="3" placeholder="Tulis deskripsi tempat"></textarea>
+                        <textarea value={about} onChange={(e) => setAbout(e.target.value)} className="form-control" rows="3" placeholder="Tulis deskripsi tempat"></textarea>
                     </div>                    
                     <div className="py-2">
                         <label className="font-weight-bold d-flex align-items-center">                            
                             <i className="material-icons">add_a_photo</i> &thinsp;
                             Tambahkan Foto Tempat
                         </label>
-                        <AddPhotos sendToParent={(val) => setImages(val)} />
+                        <AddPhotos photos={placeData.images} edit={true} sendToParent={(val) => setImages(val)} />
                     </div>
 
                     {detailComponent}
@@ -279,10 +318,10 @@ export default function Create(props) {
 
                     <div className="py-2">
                         <div className="ml-auto d-flex justify-content-end">
-                            <button disabled={loading} onClick={postPlace} className="rounded-lg d-flex align-items-center btn btn-sm my-bg btn-dark rm-border my-box-shadow">                            
+                            <button disabled={loading} onClick={updatePlace} className="rounded-lg d-flex align-items-center btn btn-sm my-bg btn-dark rm-border my-box-shadow">                            
                                 <i style={loading?{display:'none'}:{}} className="material-icons">send</i>&thinsp;
                                 <span style={!loading?{display:'none'}:{}} className="spinner-border spinner-border-sm" role="status" aria-hidden="true"/>&thinsp;
-                                Posting Tempat
+                                Update Tempat
                             </button>
                         </div>
                     </div>
