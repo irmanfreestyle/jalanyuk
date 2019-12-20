@@ -12,6 +12,7 @@ import EditPlace from './EditPlace'
 import Profile from './profile/Profile'
 
 import {useMediaQuery} from 'react-responsive'
+import Footer from '../components/navigation/Footer'
 
 export default function MainComponent(props) {    
   const Mobile = ({ children }) => {
@@ -24,7 +25,7 @@ export default function MainComponent(props) {
   }
 
   return (
-    <div>
+    <div className={useMediaQuery({maxWidth: 767}) ? 'pb-5' : ''}>
       <Desktop>
         <NavbarDesktop {...props} />
       </Desktop>
@@ -57,6 +58,7 @@ export default function MainComponent(props) {
           </Switch>
         </ScrollIntoView>
       </div>
+      <Footer />
     </div>
   )
 }

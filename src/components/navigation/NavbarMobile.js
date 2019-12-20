@@ -3,7 +3,7 @@ import logo from '../../assets/images/logo.png'
 import {Link} from 'react-router-dom'
 
 function NavbarMobile(props) {
-    let {user, signOut} = props
+    let {user, signOut} = props    
 
     function logout() {
         if(window.confirm('Yakin ingin Keluar?')) {
@@ -51,22 +51,25 @@ function NavbarMobile(props) {
                     <i className="material-icons">home</i>
                     <small>Beranda</small>
                 </Link>
-                <Link to="/profile" className="w-100 py-3 px-3 text-center text-primary d-flex flex-column align-items-center">
+                <Link to={(user) ? `/profile/${user.uid}` : `/auth` } className="w-100 py-3 px-3 text-center text-primary d-flex flex-column align-items-center">
                     <i className="material-icons">person</i>
                     <small>Profil</small>
                 </Link>
                 <Link to="/create" className="w-100 py-3 px-3 text-center text-primary d-flex flex-column align-items-center">
                     <i className="material-icons">add_circle_outline</i>
                     <small>Upload</small>
-                </Link>
-                <Link to="/" className="w-100 py-3 px-3 text-center text-primary d-flex flex-column align-items-center">
-                    <i className="material-icons">info</i>
-                    <small>Tentang</small>
-                </Link>
-                <div onClick={logout} className="pointer w-100 py-3 px-3 text-center text-primary d-flex flex-column align-items-center">
-                    <i className="material-icons">exit_to_app</i>
-                    <small>Keluar</small>
-                </div>
+                </Link>                
+                
+                {
+                    user ? <div onClick={logout} className="pointer w-100 py-3 px-3 text-center text-primary d-flex flex-column align-items-center">
+                        <i className="material-icons">exit_to_app</i>
+                        <small>Keluar</small>
+                    </div> : 
+                    <Link to="/auth" className="pointer w-100 py-3 px-3 text-center text-primary d-flex flex-column align-items-center">
+                        <i className="material-icons">keyboard_return</i>
+                        <small>Login</small>
+                    </Link>
+                }
             </div>
         </div>
     )

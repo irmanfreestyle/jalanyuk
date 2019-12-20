@@ -8,12 +8,16 @@ import Loading from '../components/Loading'
 import toDate from '../helpers/toDate'
 import isLogin from '../helpers/isLogin'
 
+import {useMediaQuery} from 'react-responsive'
+
 import {useParams, Link} from 'react-router-dom'
 import Place from '../api/Place'
 
 import {useSelector} from 'react-redux'
 
 function Detail(props) {
+
+    let isMobile = useMediaQuery({maxWidth:491})
 
     let currentUser = useSelector(state => state.user)    
     let {placeId} = useParams()
@@ -192,7 +196,27 @@ function Detail(props) {
         infinite: false,
         speed: 500,
         slidesToShow: 3,
-        slideToScroll: 1        
+        slideToScroll: 1,
+        responsive: [
+            {
+              breakpoint: 1024,
+              settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3,
+                infinite: false,
+                dots: false
+              }
+            },
+            {
+                breakpoint: 388,
+                settings: {
+                  slidesToShow: 2,
+                  slidesToScroll: 2,
+                  infinite: false,
+                  dots: false
+                }
+              }
+        ]
     }
 
     useEffect(() => {
@@ -233,7 +257,7 @@ function Detail(props) {
                                 </div>
                             </div>
 
-                            <div style={{width:'350px'}} className="pt-2">
+                            <div style={{width:'350px', maxWidth:'100%'}} className="pt-2">
                                 <Slider {...sliderOptions}>                                
                                     {
                                         place.images.map((image, i) => {
@@ -252,14 +276,16 @@ function Detail(props) {
                                 </Slider>
                             </div>    
 
-                            <div className="my-2 d-flex align-items-center flex-wrap">
-                                <ReviewModal place={place} />
-                                <button onClick={savePlace} type="button" className={"btn mr-2 btn-sm d-flex align-items-center "+(hasSaved?'btn-outline-danger':'btn-outline-secondary')}>
+                            <div className={isMobile ? 'my-2 d-flex align-items-center flex-wrap justify-content-center' : 'my-2 d-flex align-items-center flex-wrap' }>
+                                <div className="mb-1">
+                                    <ReviewModal place={place} />
+                                </div>
+                                <button onClick={savePlace} type="button" className={"mb-1 btn mr-2 btn-sm d-flex align-items-center "+(hasSaved?'btn-outline-danger':'btn-outline-secondary')}>
                                     {savedLoading}
                                     &thinsp;
                                     Simpan Tempat
                                 </button>
-                                <button onClick={toggleBeenHere} type="button" className={"btn mr-2 btn-sm d-flex align-items-center "+(hasBeenHere?'btn-outline-danger':'btn-outline-secondary')}>
+                                <button onClick={toggleBeenHere} type="button" className={"mb-1 btn mr-2 btn-sm d-flex align-items-center "+(hasBeenHere?'btn-outline-danger':'btn-outline-secondary')}>
                                     {beenHereLoading}                                    
                                     &thinsp;
                                     Pernah Kesini
@@ -269,7 +295,7 @@ function Detail(props) {
                     </div>
                     
                     <div className="col-sm-12 col-md-4 px-1">                        
-                        <div className="bg-white mb-1 px-3 py-2" style={{position: 'sticky', top: '70px'}}>
+                        <div className="bg-white mb-1 px-3 py-2" style={{position: 'sticky', top: '75px'}}>
                             <span className="font-weight-bold">Info tempat</span>
                             <div className="d-flex py-2 text-primary">
                                 <i className="material-icons">location_on</i>&thinsp;
@@ -314,7 +340,7 @@ function Detail(props) {
                             </p>
                         </div>
                         
-                        <div className="bg-white px-3 py-3 bg-white">
+                        <div className="bg-white px-3 py-3 my-2 bg-white">
                             <div className="font-weight-bold text-primary d-flex align-items-center justify-content-between">
                                 <div className="d-flex align-items-center">
                                     <i className="material-icons">rate_review</i>&thinsp;
@@ -346,7 +372,7 @@ function Detail(props) {
                         </div>
                     </div>
                     <div className="px-1 py-2 col-sm-12 col-md-4">
-                        <div className="bg-white px-3 py-3" style={{position: 'sticky', top: '70px'}}>
+                        <div className="bg-white px-3 py-2" style={{position: 'sticky', top: '75px'}}>
                             <div className="font-weight-bold text-primary d-flex align-items-center">
                                 <i className="material-icons">info_outline</i>&thinsp;
                                 <span>User yang pernah kesini </span> &thinsp;

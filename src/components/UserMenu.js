@@ -21,6 +21,7 @@ export default function UserMenu(props) {
         <div style={{position:'relative', display:'inline-block'}}>
             <div className="dropdown">
                 <button className="btn pl-0 btn-sm dropdown-toggle" type="button" id="drop-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span className="text-primary">{currentUser.displayName}</span> &thinsp;
                     <Avatar width="30" height="30" photoURL={currentUser.photoURL} /> &thinsp;                    
                 </button>
                 <div className="dropdown-menu dropdown-menu-right" aria-labelledby="drop-menu" style={{width:'200px'}}>

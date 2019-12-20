@@ -1,8 +1,12 @@
 import React from 'react'
 import iconHeader from '../assets/images/header.svg'
-import {Link} from 'react-router-dom'
 
-export default function Header() {
+import {useMediaQuery} from 'react-responsive'
+
+export default function Header() {    
+    const isMobile = useMediaQuery({ maxWidth: 938 })     
+
+
     const styles = {
         header: {
             height: '75vh',
@@ -42,13 +46,15 @@ export default function Header() {
 
     return (
         <div style={styles.header}>
-            <img style={styles.icon} src={iconHeader} alt="icon" />
+            {
+                !isMobile ? <img style={styles.icon} src={iconHeader} alt="icon" /> : null
+            }
 
             <div className="row">
-                <div className="col-sm-10 col-xs-12">
+                <div className="col-md-10 col-xs-12">
                     <div style={{position:'relative', zIndex:'3'}}>
-                        <h1>Siap berpetualang <br/> keliling Indonesia?</h1>
-                        <p className="text-primary">
+                        <h1 className={isMobile?'text-center':''}>Siap berpetualang <br/> keliling Indonesia?</h1>
+                        <p className={isMobile?'text-center text-secondary':''}>
                             Cari tau dulu yuk info mengenai tempat tujuan Kamu, <br/>
                             disini kamu bisa cari info, review tempat, dan simpan tempat favorit.
                         </p>

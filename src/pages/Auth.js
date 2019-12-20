@@ -48,7 +48,7 @@ export default function Auth(props) {
 
     return (
         <div style={styles.wrap}>            
-            <button onClick={login} type="button" className="btn bg-white btn-light d-flex align-items-center">
+            <button onClick={login} type="button" className="btn btn-outline-danger d-flex align-items-center">
                 <img src="https://avatars.githubusercontent.com/u/1342004" width="20" alt="google icon" />&thinsp;
                 Login dengan Google
             </button>

@@ -2,7 +2,10 @@ import React from 'react'
 import Line from './Line'
 import Card from './Card'
 
-export default function NewDestination() {
+export default function NewDestination(props) {
+    
+    let {places} = props
+
     return (
         <div>
             <div className="text-primary d-flex align-items-center">
@@ -12,15 +15,15 @@ export default function NewDestination() {
             <Line width="215px" />
             <br/>
             <div className="row">
-                <div className="col-sm-6 col-md-6 col-lg-4">
-                    <Card src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ6AQhst_sHmQbwE3rp3t2tHEgYP9iJFTmq07ZyzCoIMBHVEp4i"/>
-                </div>
-                <div className="col-sm-6 col-md-6 col-lg-4">
-                    <Card src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSHV9A-tukd4DHubfvQrCjoLaLVwJL09E7uK4NN0r-p8M9HOQd_"/>
-                </div>
-                <div className="col-sm-6 col-md-6 col-lg-4">
-                    <Card src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTAi3yj7QYWJwbiApicS8sl6GUfVPMDsqwrdahR6hMVuixS0jDc"/>
-                </div>
+                {
+                    places.map(place => {
+                        return (
+                            <div key={place.placeId} className="col-sm-6 col-md-6 col-lg-4">
+                                <Card place={place} />
+                            </div>
+                        )
+                    })
+                }
             </div>
         </div>
     )
