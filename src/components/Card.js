@@ -34,7 +34,7 @@ export default function Card(props) {
             <div className="card-body text-center" style={styles.cardBody}>
                 <Link to="/place/id">
                     <button style={styles.cardBody.button} className="my-box-shadow btn text-primary bg-white rounded-pill">
-                        Lihat Detail
+                        Lihat Tempat
                         <i className="material-icons">navigate_next</i>
                     </button>
                 </Link>

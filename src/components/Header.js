@@ -44,16 +44,23 @@ export default function Header() {
         <div style={styles.header}>
             <img style={styles.icon} src={iconHeader} alt="icon" />
 
-            <div style={{position:'relative', zIndex:'3'}}>
-                <h1>Siap berpetualang <br/> keliling Indonesia?</h1>
-                <p className="text-primary">Cari tau dulu yuk info mengenai tempat tujuan Kamu</p>
-                <div style={styles.inputSearch} className="rounded-pill">                    
-                    <input className="text-primary" placeholder="Mau kemana nih?" type="text" style={styles.inputSearch.input} />
-                    <Link to="/search">
-                        <button className="btn rm-border my-bg btn-dark" style={{height:'100%'}}>
-                            <i className="material-icons d-flex justify-content-center align-items-center">search</i>
-                        </button>
-                    </Link>
+            <div className="row">
+                <div className="col-sm-10 col-xs-12">
+                    <div style={{position:'relative', zIndex:'3'}}>
+                        <h1>Siap berpetualang <br/> keliling Indonesia?</h1>
+                        <p className="text-primary">
+                            Cari tau dulu yuk info mengenai tempat tujuan Kamu, <br/>
+                            disini kamu bisa cari info, review tempat, dan simpan tempat favorit.
+                        </p>
+                        {/* <div style={styles.inputSearch} className="rounded-pill">                    
+                            <input className="text-primary" placeholder="Mau kemana nih?" type="text" style={styles.inputSearch.input} />
+                            <Link to="/search">
+                                <button className="btn rm-border my-bg btn-dark" style={{height:'100%'}}>
+                                    <i className="material-icons d-flex justify-content-center align-items-center">search</i>
+                                </button>
+                            </Link>
+                        </div> */}
+                    </div>
                 </div>
             </div>
         </div>

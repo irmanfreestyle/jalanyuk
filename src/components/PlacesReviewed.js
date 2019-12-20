@@ -4,7 +4,7 @@ import Card from './Card'
 
 export default function PlacesReviewed() {
     return (
-        <div className="my-5 container">
+        <div className="container">
             <div className="text-primary d-flex align-items-center">
                 <i className="material-icons">rate_review</i>&thinsp;
                 Tempat yang Telah di Ulas<br/>                
