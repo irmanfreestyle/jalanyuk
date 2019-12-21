@@ -30,8 +30,8 @@ function NavbarMobile(props) {
                     zIndex: '5'
                 }}
             >
-                <Link className="navbar-brand" to="/">            
-                    <img src={logo} width="100" alt="logo"></img>            
+                <Link className="navbar-brand mr-0" to="/">            
+                    <i className="material-icons text-primary" style={{fontSize:'40px'}}>terrain</i>                    
                 </Link>
             </div>
 

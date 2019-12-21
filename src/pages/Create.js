@@ -23,8 +23,8 @@ export default function Create(props) {
     let user = useSelector(state => {
         let {uid, displayName, email, photoURL} = state.user || {}
         return {uid, displayName, email, photoURL}
-    })
-
+    })    
+    
     let [days, setDays] = useState([
         {
             name: 'Minggu',
@@ -211,6 +211,9 @@ export default function Create(props) {
         </div>
 
     if(toPlace) return <Redirect to={`/place/${placeIdRedirect}`} />
+    if(user.uid === undefined) {
+        return <Redirect to="/" />
+    }
     return (
         <div>
             <div className="my-bg text-white py-5">

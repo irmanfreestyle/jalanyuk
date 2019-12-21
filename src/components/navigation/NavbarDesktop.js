@@ -27,8 +27,10 @@ export default function Navbar(props) {
     return (
         <nav style={(windowScroll > 585) ? {boxShadow:'2px 3px 5px rgba(0,0,0,0.3)'} : {}} className="navbar fixed-top navbar-light navbar-expand-sm bg-white">
             <div className="container">                
-                <Link className="navbar-brand" to="/">            
-                    <img src={logo} width="100" alt="logo"></img>            
+                <Link className="navbar-brand d-flex align-items-center" to="/">            
+                    <i className="material-icons text-primary" style={{fontSize:'40px'}}>terrain</i>
+                    &thinsp;
+                    <small className="text-primary font-weight-bold">Jalan Yuk</small>
                 </Link>            
                 <div className="collapse navbar-collapse" id="navbarNav">                
                     <ul className="navbar-nav ml-auto">
