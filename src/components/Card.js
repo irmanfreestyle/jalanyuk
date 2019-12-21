@@ -23,7 +23,7 @@ export default function Card(props) {
             },
             img: {
                 borderRadius: '15px',
-                boxShadow: '0 5px 28px rgba(0,0,0,0.2), 0 0px 10px rgba(0,0,0,0.2)'
+                boxShadow: '0 5px 28px rgba(0,0,0,0.2), 0 0px 10px rgba(0,0,0,0.2)',
             }
         }
     }

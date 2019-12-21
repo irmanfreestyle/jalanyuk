@@ -27,7 +27,7 @@ export default function Home() {
     function getNewPlaces() {
         let tmpNewPlace = []
         Firebase.db.collection('places')
-        .orderBy("created", "desc").limit(3)
+        .orderBy("created", "desc")
         .get()
         .then(doc => {
             doc.forEach(place => {
@@ -44,7 +44,7 @@ export default function Home() {
         try {
             let tmpReviewedPlaces = []
             let doc = await Firebase.db.collection('places').orderBy('created', 'desc').get()
-            doc.forEach(place => {
+            doc.forEach((place, i) => {
                 if(place.data().reviews.length) {
                     tmpReviewedPlaces.push(place.data())
                 }
@@ -88,12 +88,7 @@ export default function Home() {
             </div>
 
             <div className="my-5 container">
-                <NewDestination places={newPlaces} />
-                <div className="d-flex justify-content-center">
-                    <Link to="/">
-                        <button className="rounded-pill btn btn-sm btn-outline-danger">Lihat Selengkapnya</button>
-                    </Link>
-                </div>
+                <NewDestination places={newPlaces} />                
             </div>
 
             <div className="my-bg">                
@@ -128,12 +123,7 @@ export default function Home() {
             </div>             
             
             <div className="my-5">
-                <PlacesReviewed places={reviewedPlaces} />
-                <div className="d-flex justify-content-center">
-                    <Link to="/">
-                        <button className="rounded-pill btn btn-sm btn-outline-danger">Lihat Selengkapnya</button>
-                    </Link>
-                </div>
+                <PlacesReviewed places={reviewedPlaces} />                
             </div>
 
         </div>

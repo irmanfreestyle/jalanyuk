@@ -57,3 +57,11 @@ button.my-bg:hover {
 .slick-list> div {
   margin-left:0;
 }
+
+.slick-prev:before, .slick-next:before {
+  color: #ff5252;
+  font-size: 40px;  
+}
+.slick-prev {
+  transform: translateX(-20px);
+}

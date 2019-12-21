@@ -6,7 +6,7 @@ import NavbarDesktop from '../components/navigation/NavbarDesktop'
 import NavbarMobile from '../components/navigation/NavbarMobile'
 import Detail from './Detail'
 import ScrollIntoView from '../components/ScrollIntoView'
-import Search from './Search'
+import Filter from './Filter'
 import Create from './Create'
 import EditPlace from './EditPlace'
 import Profile from './profile/Profile'
@@ -43,8 +43,8 @@ export default function MainComponent(props) {
             <Route exact path="/place/:placeId">
               <Detail {...props} />
             </Route>
-            <Route exact path="/search">
-              <Search />
+            <Route exact path="/filter/:category">
+              <Filter />
             </Route>
             <Route exact path="/create">
               <Create />
