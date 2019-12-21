@@ -3,6 +3,8 @@ import AddPhotos from '../components/AddPhotos'
 import Place from '../api/Place'
 import {Redirect} from 'react-router-dom'
 
+import Swal from '../helpers/Swal'
+
 import {useSelector} from 'react-redux'
 
 export default function Create(props) {
@@ -125,7 +127,7 @@ export default function Create(props) {
                 Place.db.collection("places").doc(placeId).update({placeId})
                 .then(function() {
                     setLoading(false)
-                    alert('Berhasil posting, (ubah pake sweetalert gan...)')                    
+                    Swal.swalert('Berhasil memposting', '', 'success')
                     // redirect to place page
                     setPlaceIdRedirect(placeId)
                     setToPlace(true)
