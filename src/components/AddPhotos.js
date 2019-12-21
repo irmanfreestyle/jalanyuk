@@ -85,7 +85,7 @@ export default class AddPhotos extends Component {
     render() {
         return (
             <div>
-                <input type="file" style={{display:'none'}} ref={this.inputRef} onChange={this.showImage} />
+                <input accept="image/*" type="file" style={{display:'none'}} ref={this.inputRef} onChange={this.showImage} />
                 <button onClick={() => this.selectImage()} className="btn btn-outline-primary btn-sm d-flex align-items-center">
                     <i className="material-icons">add_circle_outline</i>
                 </button>
