@@ -36,10 +36,18 @@ function Detail(props) {
     function getPlace() {
         Place.db.collection("places").doc(placeId)                
         .onSnapshot(function(doc) {            
-            if(doc.data() === undefined) return false
-            setPlace(doc.data())
-            initBeenHere(doc.data())
-            initHasSaved(doc.data())
+            // SORT DESC
+            let sortedReviews = doc.data().reviews.sort((a, b) => {
+                if(a < b) return 1
+                return -1
+            })
+            let placeData = Object.assign({}, doc.data())
+            placeData.reviews = sortedReviews
+
+            if(placeData === undefined) return false
+            setPlace(placeData)
+            initBeenHere(placeData)
+            initHasSaved(placeData)
 
             setNoReviews(doc.data().reviews.length ? null :
                 <div className="py-2 px-2 text-secondary">Tidak ada review</div>)
