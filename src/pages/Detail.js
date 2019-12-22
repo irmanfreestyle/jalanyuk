@@ -38,7 +38,7 @@ function Detail(props) {
         .onSnapshot(function(doc) {            
             // SORT DESC
             let sortedReviews = doc.data().reviews.sort((a, b) => {
-                if(a < b) return 1
+                if(a.created < b.created) return 1
                 return -1
             })
             let placeData = Object.assign({}, doc.data())
