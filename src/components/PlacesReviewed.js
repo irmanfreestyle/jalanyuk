@@ -54,17 +54,20 @@ export default function PlacesReviewed(props) {
             </div>            
             <Line width="230px" />
             <br/>
-            <Slider {...sliderOptions}>
-                {
-                    places.map(place => {
-                        return (
-                            <div key={place.placeId} className="px-3 py-3">
-                                <Card place={place} />
-                            </div>
-                        )
-                    })
-                }
-            </Slider>
+            {
+                !places.length ? <h5 className="text-center text-primary">Loading...</h5> :
+                <Slider {...sliderOptions}>
+                    {
+                        places.map(place => {
+                            return (
+                                <div key={place.placeId} className="px-3 py-3">
+                                    <Card place={place} />
+                                </div>
+                            )
+                        })
+                    }
+                </Slider>
+            }
         </div>
     )
 }
